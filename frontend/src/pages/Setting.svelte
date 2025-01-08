@@ -127,24 +127,46 @@
                 >(e.g: 5m, 10m, 1h, 5h)
               </span></label
             >
-            <!--<select
+            <select
               bind:value={imageInterval}
               class="border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
             >
-              <option value="10s">10s</option>
-              <option value="30s">30s</option>
-              <option value="10m">10m</option>
-              <option value="30m">30m</option>
-              <option value="1h">1h</option>
-            </select> -->
-            <input
+              <option value="30s" selected={imageInterval === '30s'}>30s</option
+              >
+              <option value="5m" selected={imageInterval === '5m'}>5m</option>
+
+              <option value="10m" selected={imageInterval === '10m'}>10m</option
+              >
+              <option value="30m" selected={imageInterval === '30m'}>30m</option
+              >
+              <option value="1h" selected={imageInterval === '1h'}>1h</option>
+            </select>
+            <!-- <input
               type="text"
               class="border border-gray-400 p-2 w-6/12 rounded-md outline-none"
               spellcheck="false"
               autocomplete="off"
               id="image-query"
               bind:value={imageInterval}
-            />
+            /> -->
+          </div>
+
+          <div class="my-2">
+            <label for="imagepath"> Schedule Image Download</label>
+            <select
+              bind:value={imageInterval}
+              class="border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
+            >
+              <option value="30s" selected={imageInterval === '30s'}>30s</option
+              >
+              <option value="5m" selected={imageInterval === '5m'}>5m</option>
+
+              <option value="10m" selected={imageInterval === '10m'}>10m</option
+              >
+              <option value="30m" selected={imageInterval === '30m'}>30m</option
+              >
+              <option value="1h" selected={imageInterval === '1h'}>1h</option>
+            </select>
           </div>
           <div class="mt-2">
             <label for="imagepath"> Unsplash API key</label>

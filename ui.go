@@ -17,7 +17,7 @@ func SetMenuItem(ctx context.Context, app *App) *menu.Menu {
 		_, err := run.MessageDialog(ctx, run.MessageDialogOptions{
 			Type:          run.InfoDialog,
 			Title:         "Picasa Desktop",
-			Message:       "Get random wallpaper for your desktop. \n \n © 2024-2024. Abiodun Azeez. \n All Right Reserved.",
+			Message:       "Get random wallpaper for your desktop. \n \n © 2024. Abiodun Azeez. \n All Right Reserved.",
 			DefaultButton: "No",
 		})
 		if err != nil {
