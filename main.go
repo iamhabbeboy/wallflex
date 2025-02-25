@@ -61,8 +61,6 @@ func main() {
 
 	createPicasaBaseDir()
 
-	// go startSchedulerWorker()
-
 	app := NewApp()
 
 	err := wails.Run(&options.App{
