@@ -5,7 +5,8 @@
   import { SetWallpaper } from '../../wailsjs/go/main/App.js';
   import { BrowserOpenURL } from '../../wailsjs/runtime';
 
-  let path = '';
+  export let path: string;
+  let image: string = 'dsfsdf';
 
   function getUsername(imageFileName: string) {
     const [_, user] = imageFileName.split('_@');
@@ -17,12 +18,12 @@
     return `@${u}`;
   }
 
-  imagePathStore.subscribe((value) => {
+  /*imagePathStore.subscribe((value) => {
     path = value;
-  });
+  });*/
 
   const closeModal = () => {
-    imagePathStore.update((value) => (value = ''));
+    path = '';
     return;
   };
 
@@ -45,25 +46,20 @@
 
 <template>
   <div>
+    <p class="text-red-900">{image} wallpaper here</p>
     {#if path !== ''}
       <div
         class="modal-background"
         on:click={closeModal}
         on:keydown={handleKeydown}
-        transition:fade|global={{ duration: 300 }}
       >
-        <div
-          transition:fade|global={{ duration: 300 }}
-          class="modal"
-          on:click|stopPropagation
-          on:keydown|stopPropagation
-        >
+        <div class="modal" on:click|stopPropagation on:keydown|stopPropagation>
           <div class="layout">
             <button
               class=" p-2 text-sm underline bg-transparent text-gray-900 hover:text-gray-600"
               on:click={() => setAsWallpaper(path)}>Set as wallpaper</button
             >
-            <a href="#" class="close-btn" on:click|preventDefault={closeModal}>
+            <a href="#/" class="close-btn" on:click|preventDefault={closeModal}>
               <img src={CloseIcon} width="20" alt="close icon" />
             </a>
           </div>
@@ -71,7 +67,7 @@
             <div class="align-left text-gray-700 text-xs py-2">
               <span class="mr-3"
                 >Credit: <a
-                  href="#"
+                  href="#/"
                   on:click={() => openBrowser('unsplash.com')}>Unsplash</a
                 ></span
               >
@@ -80,7 +76,7 @@
                 >Author: <a
                   on:click={() =>
                     openBrowser(`unsplash.com/${getUsername(path)}`)}
-                  href="#"
+                  href="#/"
                   class="underline hover:no-underline"
                   >{getUsername(path)}
                 </a></span

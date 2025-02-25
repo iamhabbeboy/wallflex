@@ -1,9 +1,9 @@
 <script type="ts">
-  import Image from "../assets/images/no-image.svg";
+  import Image from '../assets/images/no-image.svg';
 
   async function handleDownloadImages() {
     // --
-    console.log("Hello, world");
+    console.log('Hello, world');
   }
 </script>
 

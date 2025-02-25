@@ -1,9 +1,7 @@
 <script>
-  import { link } from "svelte-spa-router";
+  import { link } from 'svelte-routing';
 
-  import IconifyIcon from "@iconify/svelte";
-
-  let defaultLink = "/";
+  import IconifyIcon from '@iconify/svelte';
 </script>
 
 <template>
@@ -11,8 +9,8 @@
     <div class="mt-0 p-10 text-left">
       <a
         class="no-underline pl-3 text-gray-600 dark:text-white flex"
-        href={""}
-        use:link={defaultLink}
+        href={'/'}
+        use:link
       >
         <IconifyIcon
           icon="bi:arrow-left"
@@ -23,12 +21,3 @@
     <slot />
   </div>
 </template>
-
-<style>
-  .nav-link {
-    margin-top: 30px;
-    padding: 20px;
-    text-align: left;
-    font-size: 18px;
-  }
-</style>

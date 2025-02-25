@@ -61,7 +61,7 @@ func (a *App) startup(ctx context.Context) {
 	menu := SetMenuItem(ctx, a)
 	runtime.MenuSetApplicationMenu(ctx, menu)
 	appConf.Init("$HOME/.picasa")
-	startSchedulerWorker()
+	// startSchedulerWorker()
 }
 
 func (a *App) GetDownloadedImages() []string {
