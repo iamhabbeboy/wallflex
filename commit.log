@@ -1,0 +1,83 @@
+af87ff6 chore: Delete old images when downloading new ones
+c292b9a Merge pull request #15 from iamhabbeboy/iamhabbeboy/scheduler
+253d145 Merge pull request #14 from iamhabbeboy/iamhabbeboy/fixes
+5062ba0 chore: Add launchctl agent for scheduler startup
+26bba43 chore: Update Makefile config
+b12ea23 Merge pull request #13 from iamhabbeboy/iamhabbeboy/scheduler
+136d5a8 chore: Update scheduler text
+5e163bf Merge pull request #12 from iamhabbeboy/iamhabbeboy/scheduler
+3137921 chore: Add scheduler to system bin
+3397a4d Merge pull request #11 from iamhabbeboy/iamhabbeboy/scheduler
+111a7d4 chore: Disable right-click
+1795c63 Merge pull request #10 from iamhabbeboy/iamhabbeboy/scheduler
+fa17f0d chore: Update the appicon
+b239408 chore: Add app icon, rename the workder to scheduler
+d2abe50 Merge pull request #9 from iamhabbeboy/iamhabbeboy/scheduler
+e981cf9 chore: Add image author username to image filename
+8b43282 Merge pull request #8 from iamhabbeboy/iamhabbeboy/scheduler
+ea5c497 chore: Update TODO doc
+a6064a4 chore: Add unsplash api key to default
+c059ff6 Merge pull request #7 from iamhabbeboy/iamhabbeboy/scheduler
+304b2f9 chore: Add download images scheduler
+4640e10 chore: Remove unused code
+d017688 chore: Add unsplash api input field
+95d1ea4 chore: Update scheduler
+ddc0e43 Merge pull request #6 from iamhabbeboy/iamhabbeboy/scheduler
+d581827 chore: Update picasa.yaml
+2cc3e9f chore: WIP: update worker
+ee169f9 chore: Implement background worker
+251e7a5 Merge pull request #5 from iamhabbeboy/iamhabbeboy/refactoring
+7fb012c chore: Update config
+65ac1b0 chore: Update image gallery
+7745a9b Merge pull request #4 from iamhabbeboy/iamhabbeboy/refactoring
+4830c4f chore: Remove yaml config
+71b35f7 chore: Remove build dir
+dc90d97 chore: Delete old code base
+8af2e45 chore: Update view UI
+fc6c0df chore: Remove unused old code
+66cd126 Merge pull request #3 from iamhabbeboy/setup-local-database
+30b1c20 chore: Add background worker
+5b92bd6 Merge pull request #2 from iamhabbeboy/setup-local-database
+d5ee792 chore: Implement dark mode
+afbad37 feat: Setup desktop app
+40bf54e feat: Setup wails desktop app ui
+34f4697 Setup database
+0970a33 Update config
+e11e404 Delete config when user stop service
+5a8fa70 Change the name to picasa
+1e6f088 Update README.md
+3471475 Update README.md
+e7a9020 Update README.md
+2c34e9b Update Makefile
+e1196cb Merge remote-tracking branch 'origin/master'
+2f2f52d Add build file
+d84ceee Update README.md
+8f9a0c8 Merge pull request #1 from iamhabbeboy/add-code-of-conduct-1
+94a3c83 Create CODE_OF_CONDUCT.md
+5a77dba Fix bugfixes
+6a99005 Remove build file
+db75529 Add Makefile
+1188c06 Add app name to reduce DRY
+119576c Update unsplash api logic
+e02198c Rename pkg to internal
+e46d101 Update typo word
+9237381 Update util
+2c90a4b Update config command to update configuration
+9f855b6 Add stop cronjob services
+c0732a7 Update modules
+2e0f13b Refactoring code
+5e9b9cc Merge remote-tracking branch 'origin/master'
+bad4f0d Check if cron already exist
+c827dc5 Add service test
+deef317 Create go.yml
+ecb79c0 Add test, clean up code
+4b53060 Update config service
+6d2b45f Refactoring code
+8679bcd Add viper to manage config
+4853764 Merge remote-tracking branch 'origin/master'
+95d0bb4 Add new command
+d13b4f5 Update README.md
+e141749 Create image directory on command entry
+24a539b Merge remote-tracking branch 'origin/master'
+1717b30 Initial commit
+43932b4 Initial commit
