@@ -243,5 +243,14 @@ func deleteFilesWithPrefix(dir, prf string) error {
 	return nil
 }
 
+func (a *App) GetGradient() error {
+	err := internal.GenerateGradientImage()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // https://gist.github.com/stupidbodo/0db61fa874213a31dc57 - replacement for cronjob
 // https://gist.github.com/harubaru/f727cedacae336d1f7877c4bbe2196e1#model-overview

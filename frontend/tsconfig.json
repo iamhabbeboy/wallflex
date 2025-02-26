@@ -21,5 +21,10 @@
     {
       "path": "./tsconfig.node.json"
     }
+  ],
+  "plugins": [
+    {
+      "name": "typescript-svelte-plugin"
+    }
   ]
 }

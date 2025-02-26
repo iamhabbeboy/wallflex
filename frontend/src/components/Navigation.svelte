@@ -35,28 +35,39 @@
 
 <template>
   <div
-    class="bg-gray-50 p-3 border-b dark:border-gray-600 flex justify-between fixed w-[100%] top-0 left-0"
+    class=" dark:bg-gray-700 dark:text-gray-50 bg-gray-50 p-3 border-b dark:border-gray-600 flex justify-between fixed w-[100%] top-0 left-0"
   >
     <div class="flex">
-      <a href="#" class="dark:text-gray-50 text-gray-500 text-xs flex">
+      <a
+        href="/"
+        use:link
+        class="dark:text-gray-50 text-gray-500 text-xs flex hover:cursor-default"
+      >
         <img
           src={DownloadImage}
           width="15"
           alt=""
           class="mr-1 dark:brightness-0 dark:invert-[1]"
-        /> Download images</a
+        /> Images</a
       >
 
-      <a href="#/" class="dark:text-gray-50 text-gray-500 text-xs flex ml-10">
+      <a
+        href="/plain-art"
+        use:link
+        class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
+      >
         <img
           src={PlainArtImage}
           width="15"
           alt=""
           class="mr-1 dark:brightness-0 dark:invert-[1]"
-        /> Plain</a
+        /> Plain Art</a
       >
 
-      <a href="#/" class="dark:text-gray-50 text-gray-500 text-xs flex ml-10">
+      <a
+        href="#/"
+        class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
+      >
         <img
           src={AbstractArt}
           width="15"
@@ -68,7 +79,7 @@
       <a
         href="#/"
         on:click={downloadImages}
-        class="dark:text-gray-50 text-gray-500 text-xs flex ml-10"
+        class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
       >
         <img
           src={AIArt}
@@ -77,11 +88,35 @@
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         /> AI
       </a>
+
+      <a
+        href="#"
+        class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
+      >
+        <img
+          src={DownloadImage}
+          width="15"
+          alt=""
+          class="mr-1 dark:brightness-0 dark:invert-[1]"
+        /> Upload folder</a
+      >
     </div>
-    <div>
+    <div class="flex">
+      <a
+        href="#"
+        class="dark:text-gray-50 text-gray-500 text-xs flex mr-5 hover:cursor-default"
+      >
+        <img
+          src={DownloadImage}
+          width="15"
+          alt=""
+          class="mr-1 dark:brightness-0 dark:invert-[1]"
+        />Download
+      </a>
+
       <a
         href="/setting"
-        class=" text-xs flex text-gray-500 dark:text-gray-50"
+        class=" text-xs flex text-gray-500 dark:text-gray-50 hover:cursor-default"
         use:link
       >
         <img

@@ -3,12 +3,17 @@ package internal
 import (
 	"desktop/internal/api"
 	"fmt"
+	"image/color"
+	"image/png"
 	"log"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
+	"strconv"
 	"strings"
+
+	"github.com/fogleman/gg"
 )
 
 func GetImagesFromDir() []string {
@@ -85,4 +90,52 @@ func isImageFile(file string) bool {
 		}
 	}
 	return false
+}
+
+func GenerateGradientImage() error {
+	w, h := 1900, 1200
+	dc := gg.NewContext(w, h)
+	stc := color.RGBA{255, 0, 0, 255}
+	endc := color.RGBA{0, 0, 255, 255}
+
+	for y := 0; y < h; y++ {
+		t := float64(y) / float64(h)
+		r := uint8((1-t)*float64(stc.R) + t*float64(endc.R))
+		g := uint8((1-t)*float64(stc.G) + t*float64(endc.G))
+		b := uint8((1-t)*float64(stc.B) + t*float64(endc.B))
+		// a := uint8((1-t)*float64(stc.A) + t*float64(endc.A))
+
+		dc.SetRGB(float64(r)/255, float64(g)/255, float64(b)/255)
+		dc.DrawLine(0, float64(y), float64(w), float64(y))
+		dc.Stroke()
+	}
+
+	f, err := os.Create("gradient.png")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	return png.Encode(f, dc.Image())
+}
+
+func HexToRGB(hex string) (int, int, int, error) {
+	// Remove the '#' if present
+	hex = strings.TrimPrefix(hex, "#")
+
+	// Parse hex values
+	r, err := strconv.ParseInt(hex[0:2], 16, 32)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+	g, err := strconv.ParseInt(hex[2:4], 16, 32)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+	b, err := strconv.ParseInt(hex[4:6], 16, 32)
+	if err != nil {
+		return 0, 0, 0, err
+	}
+
+	return int(r), int(g), int(b), nil
 }

@@ -46,7 +46,6 @@
 
 <template>
   <div>
-    <p class="text-red-900">{image} wallpaper here</p>
     {#if path !== ''}
       <div
         class="modal-background"

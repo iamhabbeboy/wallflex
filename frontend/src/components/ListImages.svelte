@@ -55,7 +55,7 @@
       <div class="flex flex-wrap justify-between">
         {#each images as image}
           <div
-            class="bg-gray-800 w-[300px] h-[300px] mb-3 cursor-pointer"
+            class="bg-gray-800 w-[300px] h-[300px] mb-3 cursor-default"
             on:click={() => setImagePath(image)}
             on:keydown={() => setImagePath(image)}
           >
