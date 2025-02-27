@@ -41,6 +41,13 @@ type ImageConfig struct {
 	Path               string
 }
 
+type RGBA struct {
+	R int
+	G int
+	B int
+	A int
+}
+
 func NewUnsplashService(apikey string, path string) *UnleaseService {
 	return &UnleaseService{
 		apikey: apikey,

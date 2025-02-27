@@ -92,11 +92,14 @@ func isImageFile(file string) bool {
 	return false
 }
 
-func GenerateGradientImage() error {
+func GenerateGradientImage(c1 api.RGBA, c2 api.RGBA) error {
 	w, h := 1900, 1200
 	dc := gg.NewContext(w, h)
-	stc := color.RGBA{255, 0, 0, 255}
-	endc := color.RGBA{0, 0, 255, 255}
+	// stc := color.RGBA{255, 0, 0, 255}
+	// endc := color.RGBA{0, 0, 255, 255}
+
+	stc := color.RGBA{uint8(c1.R), uint8(c1.G), uint8(c1.B), uint8(c1.A)}
+	endc := color.RGBA{uint8(c1.R), uint8(c1.G), uint8(c1.B), uint8(c1.A)}
 
 	for y := 0; y < h; y++ {
 		t := float64(y) / float64(h)
@@ -119,23 +122,56 @@ func GenerateGradientImage() error {
 	return png.Encode(f, dc.Image())
 }
 
-func HexToRGB(hex string) (int, int, int, error) {
+func HexToRGBA(hex string) (api.RGBA, error) {
+	var color api.RGBA
+
 	// Remove the '#' if present
-	hex = strings.TrimPrefix(hex, "#")
-
-	// Parse hex values
-	r, err := strconv.ParseInt(hex[0:2], 16, 32)
-	if err != nil {
-		return 0, 0, 0, err
-	}
-	g, err := strconv.ParseInt(hex[2:4], 16, 32)
-	if err != nil {
-		return 0, 0, 0, err
-	}
-	b, err := strconv.ParseInt(hex[4:6], 16, 32)
-	if err != nil {
-		return 0, 0, 0, err
+	if len(hex) > 0 && hex[0] == '#' {
+		hex = hex[1:]
 	}
 
-	return int(r), int(g), int(b), nil
+	// Handle different formats
+	switch len(hex) {
+	case 6: // #RRGGBB
+		hex += "FF" // Append full alpha (255) for consistency
+	case 8: // #RRGGBBAA
+		// Already in the right format
+	default:
+		return api.RGBA{}, fmt.Errorf("invalid hex color format: %s", hex)
+	}
+
+	// Parse hex components
+	values := []int{0, 0, 0, 255} // Default to white and full opacity
+	for i := 0; i < 4; i++ {
+		val, err := strconv.ParseInt(hex[i*2:i*2+2], 16, 8)
+		if err != nil {
+			return api.RGBA{}, fmt.Errorf("error parsing hex color: %v", err)
+		}
+		values[i] = int(val)
+	}
+
+	// Assign parsed values
+	color = api.RGBA{R: values[0], G: values[1], B: values[2], A: values[3]}
+	return color, nil
 }
+
+// func HexToRGB(hex string) (int, int, int, error) {
+// 	// Remove the '#' if present
+// 	hex = strings.TrimPrefix(hex, "#")
+//
+// 	// Parse hex values
+// 	r, err := strconv.ParseInt(hex[0:2], 16, 32)
+// 	if err != nil {
+// 		return 0, 0, 0, err
+// 	}
+// 	g, err := strconv.ParseInt(hex[2:4], 16, 32)
+// 	if err != nil {
+// 		return 0, 0, 0, err
+// 	}
+// 	b, err := strconv.ParseInt(hex[4:6], 16, 32)
+// 	if err != nil {
+// 		return 0, 0, 0, err
+// 	}
+//
+// 	return int(r), int(g), int(b), nil
+// }

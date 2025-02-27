@@ -4,6 +4,7 @@ import (
 	"context"
 	"desktop/internal"
 	"desktop/internal/api"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -243,14 +244,46 @@ func deleteFilesWithPrefix(dir, prf string) error {
 	return nil
 }
 
-func (a *App) GetGradient() error {
-	err := internal.GenerateGradientImage()
+func (a *App) GetGradientImage(c []string) error {
+	if len(c) == 0 {
+		return errors.New("no colors added")
+	}
+
+	rgba1, err := internal.HexToRGBA(c[0])
+
+	rgba2, err := internal.HexToRGBA(c[1])
+
+	err = internal.GenerateGradientImage(rgba1, rgba2)
 	if err != nil {
 		return err
 	}
 
 	return nil
 }
+
+func (a *App) GetHexToRGBA(color string) (api.RGBA, error) {
+	return internal.HexToRGBA(color)
+}
+
+// func (ax *App) GGradient(color string) interface{} {
+//
+// 	r, g, b, a, err := internal.HexToRGBA(color)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	res := struct {
+// 		R int `json:"r"`
+// 		G int `json:"g"`
+// 		B int `json:"b"`
+// 		A int `json:"a"`
+// 	}{
+// 		R: r,
+// 		G: g,
+// 		B: b,
+// 		A: a,
+// 	}
+// 	return res
+// }
 
 // https://gist.github.com/stupidbodo/0db61fa874213a31dc57 - replacement for cronjob
 // https://gist.github.com/harubaru/f727cedacae336d1f7877c4bbe2196e1#model-overview
