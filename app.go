@@ -244,16 +244,12 @@ func deleteFilesWithPrefix(dir, prf string) error {
 	return nil
 }
 
-func (a *App) GetGradientImage(c []string) error {
+func (a *App) GetGradientImage(c []api.RGBA) error {
 	if len(c) == 0 {
 		return errors.New("no colors added")
 	}
 
-	rgba1, err := internal.HexToRGBA(c[0])
-
-	rgba2, err := internal.HexToRGBA(c[1])
-
-	err = internal.GenerateGradientImage(rgba1, rgba2)
+	err := internal.GenerateGradientImage(c[0], c[1])
 	if err != nil {
 		return err
 	}
@@ -262,7 +258,10 @@ func (a *App) GetGradientImage(c []string) error {
 }
 
 func (a *App) GetHexToRGBA(color string) (api.RGBA, error) {
-	return internal.HexToRGBA(color)
+	fmt.Println(color)
+	r, _ := internal.HexToRGBA(color)
+	fmt.Println(r)
+	return api.RGBA{}, nil
 }
 
 // func (ax *App) GGradient(color string) interface{} {

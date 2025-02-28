@@ -1,22 +1,22 @@
 <script lang="ts">
   import Navigation from '../components/Navigation.svelte';
-  import { GetGradientImage, GetHexToRGBA } from '../../wailsjs/go/main/App.js';
+  import { GetGradientImage } from '../../wailsjs/go/main/App.js';
 
   let style: string = 'linear';
   let colors: string[] = [];
 
   let commonColors = [
-    'green',
-    'blue',
-    'gray',
-    'pink',
-    'orange',
-    'brown',
-    'red',
-    'violet',
-    'yellow',
-    'purple',
-    'black',
+    '#0D4715',
+    '#003092',
+    '#666666',
+    '#FFFFFF',
+    '#FF8000',
+    '#5F264A',
+    '#AC1754',
+    '#441752',
+    '#493D9E',
+    '#66D2CE',
+    '#000000',
     '#2589bd',
     '#a3b4a2',
     '#38686a',
@@ -25,11 +25,40 @@
   ];
 
   const handleGenerateColor = async () => {
-    console.log(colors);
-    //const res = await GetGradientImage(colors);
-    const res = await GetHexToRGBA(colors[0]);
-    console.log(res);
+    const c1 = hexToRGB(colors[0], 255);
+    const c2 = hexToRGB(colors[1], 255);
+
+    const res = await GetGradientImage([c1, c2] as any);
   };
+
+  function hexToRGB(hex: string, alpha: number) {
+    const obj = { R: 0, G: 0, B: 0, A: 0 };
+
+    hex = hex.trim();
+
+    hex = hex.replace(/^#/, '');
+
+    if (hex.length === 3) {
+      hex = hex
+        .split('')
+        .map((x) => x + x)
+        .join('');
+    }
+
+    const bigint = parseInt(hex, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    obj.R = r || 0;
+    obj.G = g || 0;
+    obj.B = b || 0;
+
+    if (alpha) {
+      obj.A = alpha;
+    }
+    return obj;
+  }
 
   const handleSelectGradientStyle = (gradient: string) => {
     style = gradient;
