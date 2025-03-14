@@ -6,7 +6,6 @@ import (
 	"github.com/fogleman/gg"
 	"image/color"
 	"image/png"
-	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -39,14 +38,15 @@ func GetImagesFromDir() []string {
 
 }
 
-func FetchImages(conf api.ImageConfig) {
+func FetchImages(conf api.ImageConfig) error {
 	apikey := conf.Apikey
 	sp := conf.Path
 	svc := api.NewImageDownload("unsplash", sp, apikey)
 	err := svc.GetImages(conf)
 	if err != nil {
-		log.Fatal(err.Error())
+		return err
 	}
+	return nil
 }
 
 func WallpaperEvent(path string) {
@@ -67,7 +67,7 @@ func GetAllFilesInDir(dir string) ([]string, error) {
 			return err
 		}
 
-		if !info.IsDir() && isImageFile(path) {
+		if !info.IsDir() && isImageFile(path) && info.Size() > 0 {
 			if isImageFile(info.Name()) {
 				images = append(images, path)
 			}

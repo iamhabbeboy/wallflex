@@ -10,11 +10,7 @@
   import DownloadImage from '../../src/assets/images/download.svg';
   import ConfigImage from '../../src/assets/images/config.svg';
 
-  import PlainArtImage from '../../src/assets/images/plain.svg';
-
-  import AbstractArt from '../../src/assets/images/art.svg';
-
-  import AIArt from '../../src/assets/images/ai.svg';
+  import { dispatcher } from '../../src/utilities/util';
 
   let isLoading = true;
 
@@ -23,8 +19,10 @@
   async function downloadImages() {
     try {
       isLoading = true;
-      const res = await DownloadImages();
+      dispatcher('downloading');
+      await DownloadImages();
     } catch (e) {
+      console.log(e);
     } finally {
       const result = await GetDownloadedImages();
       images = result ?? [];
@@ -50,7 +48,7 @@
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         /> Images</a
       >
-
+      <!--
       <a
         href="/plain-art"
         use:link
@@ -65,7 +63,7 @@
       >
 
       <a
-        href="#/"
+        href="/abstract-art"
         class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
       >
         <img
@@ -76,9 +74,8 @@
         /> Abstract Art</a
       >
 
-      <a
-        href="#/"
-        on:click={downloadImages}
+       <a
+        href="/ai"
         class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
       >
         <img
@@ -89,7 +86,7 @@
         /> AI
       </a>
 
-      <a
+       <a
         href="#"
         class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
       >
@@ -99,11 +96,12 @@
           alt=""
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         /> Upload folder</a
-      >
+      >-->
     </div>
     <div class="flex">
       <a
         href="#"
+        on:click|preventDefault={downloadImages}
         class="dark:text-gray-50 text-gray-500 text-xs flex mr-5 hover:cursor-default"
       >
         <img

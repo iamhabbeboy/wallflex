@@ -71,57 +71,84 @@
     }
     colors = [...colors, color];
   };
+
+  const handleNewColor = (event: any) => {
+    colors = [...colors, event.target.value];
+  };
 </script>
 
 <section>
   <Navigation />
 
   <div class="mt-20 text-gray-900">
+    <div class="mt-10 flex mx-auto w-7/12">
+      <div class="mx-auto">
+        <button
+          on:click={() => handleSelectGradientStyle('color')}
+          class="{style === 'color'
+            ? 'bg-gray-500'
+            : 'bg-gray-900'} hover:bg-gray-800 transition-all cursor-default text-white py-2 px-10 mb-3 rounded-l-md"
+        >
+          Plain Color
+        </button>
+        <button
+          on:click={() => handleSelectGradientStyle('linear')}
+          class="{style === 'linear'
+            ? 'bg-gray-500'
+            : 'bg-gray-900'} hover:bg-gray-800 transition-all cursor-default text-white py-2 px-10 mb-3"
+        >
+          Linear
+        </button>
+
+        <button
+          on:click={() => handleSelectGradientStyle('radical')}
+          class="{style === 'radical'
+            ? 'bg-gray-500'
+            : 'bg-gray-900'}  hover:bg-gray-800 transition-all cursor-default text-white py-2 px-10 mb-3"
+        >
+          Radical
+        </button>
+        <button
+          on:click={() => handleSelectGradientStyle('spiral')}
+          class="{style === 'spiral' ? 'bg-gray-500' : 'bg-gray-900'}
+            hover:bg-gray-800 cursor-default text-white transition-all py-2 px-10 mb-3 rounded-r-md"
+        >
+          Spiral
+        </button>
+      </div>
+    </div>
+
+    <div class="flex mx-auto w-10/12 my-10">
+      <div class="w-[100px] h-[100px] block liner-gradient bg-gray-900 mr-5">
+        skldfj
+      </div>
+      <div class="w-[100px] h-[100px] block liner-gradient bg-gray-900">
+        skldfj
+      </div>
+    </div>
+
     <div class="flex flex-wrap w-full p-2">
-      {#each commonColors as c, key}
+      {#each commonColors as c}
         <div
           style="background-color: {c}"
           on:click={() => handleSelectColor(c)}
           on:keydown={() => handleSelectColor(c)}
-          class="mt-5 cursor-default transition-all hover:opacity-70 rounded-full pt-9 text-center w-[100px] h-[100px] ml-5"
+          class="mt-5 cursor-default border-2 transition-all hover:opacity-70 rounded-full pt-9 text-center w-[100px] h-[100px] ml-5"
         ></div>
       {/each}
+      <div class="mx-auto mt-10 border rounded-md py-3 px-10">
+        <label for="customcolor"> Pick Color</label>
+        <input type="color" id="customcolor" on:change={handleNewColor} />
+      </div>
     </div>
 
-    <div class="mt-10 flex mx-auto w-1/2">
-      <button
-        on:click={() => handleSelectGradientStyle('linear')}
-        class="{style === 'linear'
-          ? 'bg-gray-500'
-          : 'bg-gray-900'} hover:bg-gray-800 transition-all cursor-default text-white py-2 px-10 mb-3 rounded-l-md"
-      >
-        Linear
-      </button>
-
-      <button
-        on:click={() => handleSelectGradientStyle('radical')}
-        class="{style === 'radical'
-          ? 'bg-gray-500'
-          : 'bg-gray-900'}  hover:bg-gray-800 transition-all cursor-default text-white py-2 px-10 mb-3"
-      >
-        Radical
-      </button>
-      <button
-        on:click={() => handleSelectGradientStyle('spiral')}
-        class="{style === 'spiral' ? 'bg-gray-500' : 'bg-gray-900'}
-            hover:bg-gray-800 cursor-default text-white transition-all py-2 px-10 mb-3 rounded-r-md"
-      >
-        Spiral
-      </button>
-    </div>
-
-    <div class="flex flex-wrap w-full p-2">
+    <div class="flex flex-wrap w-full p-2 border-t mt-5">
       {#each colors as color}
         <div
           on:click={() => (colors = colors.filter((c) => c !== color))}
           on:keydown={() => (colors = colors.filter((c) => c !== color))}
           style="background-color: {color}"
-          class="mt-5 cursor-default transition-all hover:opacity-70 rounded-full pt-9 text-center w-[100px] h-[100px] ml-5"
+          class="mt-5 cursor-default border-2 transition-all hover:opacity-70 rounded-full pt-9 text-center w-[100px] h-[100px] ml-5"
         ></div>
       {/each}
     </div>
