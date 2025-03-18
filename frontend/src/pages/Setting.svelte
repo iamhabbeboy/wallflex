@@ -79,6 +79,15 @@
       message = error;
     }
   };
+
+  function setImageCategory(query: string) {
+    imageCategory = query;
+  }
+
+  function handleRemoveWhiteSpace(event) {
+    const value = event.target.value;
+    event.target.value = value.replace(/\s/g, '');
+  }
 </script>
 
 <template>
@@ -86,16 +95,18 @@
     <h1 class="font-bold text-gray-600 dark:text-white">Configuration</h1>
     <div class="layout">
       <div
-        class="mt-4 text-[#999] border border-gray-200 dark:border-gray-500 rounded-md
+        class="my-4 text-[#999] border border-gray-200 dark:border-gray-500 rounded-md
 "
       >
         <div class="selection">
           <div>
             <label for="imagepath"
-              >Image path <p class="italic">{defaultPath}</p></label
+              >Selected directory path <p class="italic">
+                {defaultPath}
+              </p></label
             >
             <button
-              class="text-gray-100 py-2 px-5 mb-3 rounded-md bg-gray-500"
+              class="text-gray-100 py-2 px-5 mb-3 cursor-default rounded-md bg-gray-500"
               on:click={handleSelectFolder}
             >
               Change folder</button
@@ -110,16 +121,60 @@
               autocomplete="off"
               id="image-query"
               bind:value={imageCategory}
+              on:keydown={handleRemoveWhiteSpace}
             />
+            <div class="cursor-default">
+              <i class="block">Suggestions:</i>
+              <span
+                class="underline"
+                on:click={() => setImageCategory('nature')}
+                on:keydown={() => setImageCategory('nature')}
+              >
+                nature</span
+              >,
+              <span
+                class="underline"
+                on:click={() => setImageCategory('landscape')}
+                on:keydown={() => setImageCategory('landscape')}>landscape</span
+              >,
+              <span
+                class="underline"
+                on:click={() => setImageCategory('lamborghini')}
+                on:keydown={() => setImageCategory('lamborghini')}
+                >lamborghini</span
+              >,
+              <span
+                class="underline"
+                on:click={() => setImageCategory('tokyo')}
+                on:keydown={() => setImageCategory('tokyo')}
+              >
+                tokyo</span
+              >,
+              <span
+                class="underline"
+                on:click={() => setImageCategory('africa')}
+                on:keydown={() => setImageCategory('africa')}>africa</span
+              >
+            </div>
           </div>
           <div class="my-2">
             <label for="imagepath"> Total image </label>
-            <input
+            <!-- <input
               type="number"
               class="border border-gray-400 w-6/12 outline-none p-2 rounded-md"
               id="image-query"
               bind:value={totalImageCount}
-            />
+            /> -->
+            <select
+              bind:value={totalImageCount}
+              class="border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
+            >
+              <option value={5} selected={totalImageCount === 5}>5</option>
+              <option value={10} selected={totalImageCount === 10}>10</option>
+              <option value={15} selected={totalImageCount === 15}>15</option>
+
+              <option value={20} selected={totalImageCount === 20}>20</option>
+            </select>
           </div>
           <div>
             <label for="imagepath">
@@ -155,7 +210,7 @@
             <label for="imagepath"> Schedule Image Download</label>
             <select
               bind:value={imageInterval}
-              class="border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
+              class=" border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
             >
               <option value="30s" selected={imageInterval === '30s'}>30s</option
               >
@@ -181,13 +236,13 @@
           </div>
           <div class="mt-5">
             <button
-              class="text-gray-100 py-2 px-10 mb-3 rounded-md bg-gray-500"
+              class="text-gray-100 py-2 px-10 cursor-default mb-3 rounded-md bg-gray-500"
               on:click={handleSaveSetting}
             >
               Save
             </button>
             <button
-              class="text-gray-100 py-2 px-10 mb-3 rounded-md bg-gray-500"
+              class="text-gray-100 py-2 px-10 mb-3 cursor-default rounded-md bg-gray-500"
               on:click={handleRestoreSetting}
             >
               Restore config
@@ -195,6 +250,9 @@
           </div>
         </div>
       </div>
+      <div
+        class="my-4 text-[#999] block h-5 dark:border-gray-500 rounded-md"
+      ></div>
     </div>
   </Layout>
 </template>
@@ -211,5 +269,11 @@
 
   .selection label {
     display: block;
+  }
+
+  select,
+  input {
+    appearance: none;
+    -webkit-appearance: none;
   }
 </style>

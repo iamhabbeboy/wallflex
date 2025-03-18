@@ -4,8 +4,8 @@ import (
 	"context"
 	"desktop/internal"
 	"desktop/internal/api"
+	"errors"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -64,11 +64,11 @@ func (a *App) startup(ctx context.Context) {
 	// startSchedulerWorker()
 }
 
-func (a *App) GetDownloadedImages() []string {
+func (a *App) GetDownloadedImages() ([]string, error) {
 	selectedPath, err := appConf.Get("image.selected_abs_path")
 
 	if err != nil {
-		println(err)
+		return nil, err
 	}
 	path := selectedPath.(string)
 	var fp string = path
@@ -78,10 +78,10 @@ func (a *App) GetDownloadedImages() []string {
 	}
 	img, err := internal.GetAllFilesInDir(fp)
 	if err != nil {
-		println(err.Error())
+		return nil, err
 	}
 
-	return img
+	return img, nil
 }
 
 func (a *App) SelectImageDir() []string {
@@ -104,14 +104,14 @@ func (a *App) SelectImageDir() []string {
 	return imgs
 }
 
-func (a *App) DownloadImages() {
+func (a *App) DownloadImages() error {
 	apikey, _ := appConf.Get("api.unsplash_apikey")
 	dp, _ := appConf.Get("image.selected_abs_path")
 	tot, _ := appConf.Get("api.download_limit")
 	cat, _ := appConf.Get("api.image_category")
 
 	if apikey == nil || dp == nil {
-		log.Fatal("Image path not set")
+		return fmt.Errorf("Image path not set")
 	}
 
 	var ct int
@@ -145,9 +145,13 @@ func (a *App) DownloadImages() {
 	err := deleteFilesWithPrefix(imagePath, "picasa_")
 
 	if err != nil {
-		log.Fatal("Error deleting images ", err.Error())
+		return fmt.Errorf("Error deleting images: %v ", err.Error())
 	}
-	internal.FetchImages(c)
+	if err := internal.FetchImages(c); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (a *App) SetWallpaper(path string) {
@@ -243,14 +247,49 @@ func deleteFilesWithPrefix(dir, prf string) error {
 	return nil
 }
 
-func (a *App) GetGradient() error {
-	err := internal.GenerateGradientImage()
+func (a *App) GetGradientImage(c []api.RGBA) error {
+	if len(c) == 0 {
+		return errors.New("no colors added")
+	}
+
+	err := internal.GenerateGradientImage(c[0], c[1])
 	if err != nil {
 		return err
 	}
 
 	return nil
 }
+
+func (a *App) GetHexToRGBA(color string) (api.RGBA, error) {
+	fmt.Println(color)
+	r, _ := internal.HexToRGBA(color)
+	fmt.Println(r)
+	return api.RGBA{}, nil
+}
+
+func (a *App) Testament() error {
+	return fmt.Errorf("Testament...")
+}
+
+// func (ax *App) GGradient(color string) interface{} {
+//
+// 	r, g, b, a, err := internal.HexToRGBA(color)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	res := struct {
+// 		R int `json:"r"`
+// 		G int `json:"g"`
+// 		B int `json:"b"`
+// 		A int `json:"a"`
+// 	}{
+// 		R: r,
+// 		G: g,
+// 		B: b,
+// 		A: a,
+// 	}
+// 	return res
+// }
 
 // https://gist.github.com/stupidbodo/0db61fa874213a31dc57 - replacement for cronjob
 // https://gist.github.com/harubaru/f727cedacae336d1f7877c4bbe2196e1#model-overview
