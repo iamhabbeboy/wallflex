@@ -79,6 +79,15 @@
       message = error;
     }
   };
+
+  function setImageCategory(query: string) {
+    imageCategory = query;
+  }
+
+  function handleRemoveWhiteSpace(event) {
+    const value = event.target.value;
+    event.target.value = value.replace(/\s/g, '');
+  }
 </script>
 
 <template>
@@ -112,14 +121,40 @@
               autocomplete="off"
               id="image-query"
               bind:value={imageCategory}
+              on:keydown={handleRemoveWhiteSpace}
             />
             <div class="cursor-default">
               <i class="block">Suggestions:</i>
-              <span class="underline"> nature</span>,
-              <span class="underline">landscape</span>,
-              <span class="underline">lamborghini</span>,
-              <span class="underline"> tokyo</span>,
-              <span class="underline">africa</span>
+              <span
+                class="underline"
+                on:click={() => setImageCategory('nature')}
+                on:keydown={() => setImageCategory('nature')}
+              >
+                nature</span
+              >,
+              <span
+                class="underline"
+                on:click={() => setImageCategory('landscape')}
+                on:keydown={() => setImageCategory('landscape')}>landscape</span
+              >,
+              <span
+                class="underline"
+                on:click={() => setImageCategory('lamborghini')}
+                on:keydown={() => setImageCategory('lamborghini')}
+                >lamborghini</span
+              >,
+              <span
+                class="underline"
+                on:click={() => setImageCategory('tokyo')}
+                on:keydown={() => setImageCategory('tokyo')}
+              >
+                tokyo</span
+              >,
+              <span
+                class="underline"
+                on:click={() => setImageCategory('africa')}
+                on:keydown={() => setImageCategory('africa')}>africa</span
+              >
             </div>
           </div>
           <div class="my-2">

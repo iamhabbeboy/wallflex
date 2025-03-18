@@ -48,7 +48,7 @@ type RGBA struct {
 	A int
 }
 
-const timeout = 2 * time.Second
+const timeout = 60 * time.Second
 
 func NewUnsplashService(apikey string, path string) *UnleaseService {
 	return &UnleaseService{

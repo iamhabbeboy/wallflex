@@ -17,17 +17,7 @@
   let images: string[] = [];
 
   async function downloadImages() {
-    try {
-      isLoading = true;
-      dispatcher('downloading');
-      await DownloadImages();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      const result = await GetDownloadedImages();
-      images = result ?? [];
-      isLoading = false;
-    }
+    dispatcher('downloading');
   }
 </script>
 

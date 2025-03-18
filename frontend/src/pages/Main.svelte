@@ -1,7 +1,11 @@
 <script lang="ts">
   import Navigation from '../components/Navigation.svelte';
   import ListImages from '../components/ListImages.svelte';
-  import { Testament, GetDownloadedImages } from '../../wailsjs/go/main/App.js';
+  import {
+    GetDownloadedImages,
+    DownloadImages,
+    MessageDialog,
+  } from '../../wailsjs/go/main/App.js';
   import { navigate } from 'svelte-routing';
   import LoaderImage from '../../src/assets/images/loader.svg';
   import NoImagesPlaceHolder from '../../src/assets/images/color-art.svg';
@@ -24,21 +28,26 @@
     }
   };
 
-  onMount(async (): Promise<any> => {
+  async function downloadImages() {
     try {
-      const test = await Testament();
-      console.log(test);
-      console.log('successful');
+      await DownloadImages();
     } catch (e) {
       console.log(e);
+      MessageDialog(e);
+    } finally {
+      const result = await GetDownloadedImages();
+      images = result ?? [];
+      isLoading = false;
     }
+  }
 
+  onMount(async (): Promise<any> => {
     try {
       const result = await GetDownloadedImages();
       images = result ?? [];
       isLoading = false;
     } catch (e) {
-      console.log(e);
+      MessageDialog(e);
     } finally {
       isLoading = false;
     }
@@ -47,11 +56,13 @@
       navigate('/setting', { replace: true });
     });
 
-    imagePathStore.subscribe((value) => {
+    imagePathStore.subscribe(async (value) => {
       if (value === 'downloading') {
         isLoading = true;
+        await downloadImages();
       }
     });
+    isLoading = false;
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     //document.addEventListener('contextmenu', disableRightClick);
