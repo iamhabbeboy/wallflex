@@ -32,7 +32,6 @@
     try {
       await DownloadImages();
     } catch (e) {
-      console.log(e);
       MessageDialog(e);
     } finally {
       const result = await GetDownloadedImages();
@@ -47,7 +46,7 @@
       images = result ?? [];
       isLoading = false;
     } catch (e) {
-      MessageDialog(e);
+     // MessageDialog(e);
     } finally {
       isLoading = false;
     }
@@ -88,11 +87,10 @@
     </div>
   {/if}
   {#if isLoading}
-    <div class="mx-auto w-48 h-screen flex justify-center items-center">
-      <img src={LoaderImage} alt="" />
+    <div class="mx-auto mt-10 flex justify-center items-center">
+      <img src={LoaderImage} alt="" width="50" />
       <h4 class="font-bold">Processing...</h4>
     </div>
-  {:else}
-    <ListImages {images} />
   {/if}
+  <ListImages {images} />
 </div>
