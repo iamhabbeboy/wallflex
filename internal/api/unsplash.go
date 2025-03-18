@@ -93,22 +93,26 @@ func (u *UnleaseService) GetImages(imgConf ImageConfig) error {
 		parts := strings.Split(path, "/")
 		username := parts[len(parts)-1]
 
-		go (func() {
+		go (func(u string, k int, uname string) {
 			defer wg.Done()
-			if err := download(ctx, v.Urls.Full, key, imagePath, username); err != nil {
+			if err := download(ctx, u, k, imagePath, uname); err != nil {
 				errCh <- err
 			}
-		})()
+		})(v.Urls.Full, key, username)
 	}
 	wg.Wait()
 	close(errCh)
 
-	select {
-	case err := <-errCh:
+	for err := range errCh {
 		return err
-	default:
-		return nil
 	}
+	return nil
+	// select {
+	// case err := <-errCh:
+	// 	return err
+	// default:
+	// 	return nil
+	// }
 }
 
 func getImage(ctx context.Context, url string) ([]Image, error) {
@@ -136,7 +140,6 @@ func getImage(ctx context.Context, url string) ([]Image, error) {
 }
 
 func download(ctx context.Context, image string, index int, IMAGE_DIR string, upr string) error {
-
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, image, nil)
 	if err != nil {
 		return err
@@ -159,7 +162,6 @@ func download(ctx context.Context, image string, index int, IMAGE_DIR string, up
 	fmt.Println(info)
 
 	f, err := os.Create(fn)
-	// fmt.Sprintf("%s/%v.jpg", IMAGE_DIR, index))
 	if err != nil {
 		return err
 	}
