@@ -23,8 +23,9 @@ type AppConf struct {
 }
 
 type Image struct {
-	SelectedAbsPath string    `mapstructure:"selected_abs_path"`
-	LastDownloads   time.Time `mapstructure:"last_downloads"`
+	SelectedAbsPath        string    `mapstructure:"selected_abs_path"`
+	LastDownloads          time.Time `mapstructure:"last_downloads"`
+	HasAutoDownloadEnabled bool      `mapstructure:"auto_download"`
 }
 
 type Api struct {

@@ -16,6 +16,7 @@
   let message = '';
   let defaultPath = '';
   let apikey = '';
+  let hasAutoDownloadEnabled = false;
 
   async function handleSaveSetting() {
     if (imageCategory === '' || totalImageCount === 0 || imageInterval === '') {
@@ -28,6 +29,7 @@
       DefaultPath: defaultPath,
       Interval: imageInterval,
       Apikey: apikey,
+      hasAutoDownloadEnabled: hasAutoDownloadEnabled,
     };
 
     SetConfig(conf);
@@ -46,6 +48,7 @@
     imageInterval = conf.Interval;
     defaultPath = conf.DefaultPath;
     apikey = conf.Apikey;
+    hasAutoDownloadEnabled = conf.HasAutoDownloadEnabled;
   });
 
   const handleSelectFolder = async () => {
@@ -64,12 +67,14 @@
       DefaultPath: '.picasa/images',
       Interval: '30s',
       Apikey: '',
+      HasAutoDownloadEnabled: false,
     };
     imageCategory = conf.ImageCategory;
     totalImageCount = conf.TotalImage;
     defaultPath = conf.DefaultPath;
     imageInterval = conf.Interval;
     apikey = conf.Apikey;
+    hasAutoDownloadEnabled = conf.HasAutoDownloadEnabled;
 
     SetConfig(conf);
     try {
@@ -88,6 +93,10 @@
     const value = event.target.value;
     event.target.value = value.replace(/\s/g, '');
   }
+
+  function handleToggleAutoDownload(event) {
+    hasAutoDownloadEnabled = event.target.checked;
+  }
 </script>
 
 <template>
@@ -100,7 +109,7 @@
       >
         <div class="selection">
           <div>
-            <label for="imagepath"
+            <label for="imagepath" class="form-label"
               >Selected directory path <p class="italic">
                 {defaultPath}
               </p></label
@@ -113,7 +122,7 @@
             >
           </div>
           <div>
-            <label for="imagepath"> Image query</label>
+            <label for="imagepath" class="form-label"> Image query</label>
             <input
               type="text"
               class="border border-gray-400 w-6/12 outline-none p-2 rounded-md"
@@ -158,18 +167,12 @@
             </div>
           </div>
           <div class="my-2">
-            <label for="imagepath"> Total image </label>
-            <!-- <input
-              type="number"
-              class="border border-gray-400 w-6/12 outline-none p-2 rounded-md"
-              id="image-query"
-              bind:value={totalImageCount}
-            /> -->
+            <label for="imagepath" class="form-label"> Total image </label>
             <select
               bind:value={totalImageCount}
               class="border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
             >
-            <option value={3} selected={totalImageCount === 3}>3</option>
+              <option value={3} selected={totalImageCount === 3}>3</option>
               <option value={5} selected={totalImageCount === 5}>5</option>
               <option value={10} selected={totalImageCount === 10}>10</option>
               <option value={15} selected={totalImageCount === 15}>15</option>
@@ -177,8 +180,17 @@
               <option value={20} selected={totalImageCount === 20}>20</option>
             </select>
           </div>
+          <div class="bg-gray-200 p-2 rounded-md w-6/12 mx-auto my-5">
+            <label class="inline-flex items-center cursor-pointer">
+              <input type="checkbox" value="" class="sr-only peer" on:change={handleToggleAutoDownload} checked={hasAutoDownloadEnabled}/>
+              <div
+                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600"
+              ></div>
+              <span class="ms-3 text-sm font-medium">Auto download images</span>
+            </label>
+          </div>
           <div>
-            <label for="imagepath">
+            <label for="imagepath" class="form-label">
               Image change interval <span class="text-sm"
                 >(e.g: 5m, 10m, 1h, 5h)
               </span></label
@@ -197,18 +209,10 @@
               >
               <option value="1h" selected={imageInterval === '1h'}>1h</option>
             </select>
-            <!-- <input
-              type="text"
-              class="border border-gray-400 p-2 w-6/12 rounded-md outline-none"
-              spellcheck="false"
-              autocomplete="off"
-              id="image-query"
-              bind:value={imageInterval}
-            /> -->
           </div>
 
           <div class="my-2">
-            <label for="imagepath"> Schedule Image Download</label>
+            <label for="imagepath" class="form-label"> Schedule Image Download</label>
             <select
               bind:value={imageInterval}
               class=" border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
@@ -225,7 +229,7 @@
             </select>
           </div>
           <div class="mt-2">
-            <label for="imagepath"> Unsplash API key</label>
+            <label for="imagepath" class="form-label"> Unsplash API key</label>
             <input
               type="text"
               class="border border-gray-400 p-2 w-6/12 rounded-md outline-none"
@@ -262,14 +266,16 @@
   .layout {
     width: 40rem;
     margin: auto;
+    font-size: 14px;
   }
 
   .selection {
     padding: 30px 20px 20px 20px;
   }
 
-  .selection label {
+  .selection .form-label {
     display: block;
+    margin-top: 10px;
   }
 
   select,

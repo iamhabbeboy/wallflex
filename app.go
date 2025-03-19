@@ -21,11 +21,12 @@ type App struct {
 var appConf = internal.AppConfig{}
 
 type Conf struct {
-	ImageCategory string
-	TotalImage    int
-	Interval      string
-	DefaultPath   string
-	Apikey        string
+	ImageCategory          string
+	TotalImage             int
+	Interval               string
+	DefaultPath            string
+	Apikey                 string
+	HasAutoDownloadEnabled bool
 }
 
 const APP_NAME = ".picasa"
@@ -111,7 +112,7 @@ func (a *App) DownloadImages() error {
 	cat, _ := appConf.Get("api.image_category")
 
 	if apikey == nil || dp == nil {
-		return fmt.Errorf("Image path not set")
+		return fmt.Errorf("image path not set")
 	}
 
 	var ct int
@@ -145,7 +146,7 @@ func (a *App) DownloadImages() error {
 	err := deleteFilesWithPrefix(imagePath, "picasa_")
 
 	if err != nil {
-		return fmt.Errorf("Error deleting images: %v ", err.Error())
+		return fmt.Errorf("error deleting images: %v ", err.Error())
 	}
 	if err := internal.FetchImages(c); err != nil {
 		return err
@@ -164,6 +165,7 @@ func (a *App) GetConfig() Conf {
 	intvl, _ := appConf.Get("image.interval")
 	dp, _ := appConf.Get("image.selected_abs_path")
 	akey, _ := appConf.Get("api.unsplash_apikey")
+	autoDownload, _ := appConf.Get("image.auto_download")
 
 	var img, intv, d string
 	var tot int
@@ -199,11 +201,12 @@ func (a *App) GetConfig() Conf {
 	}
 
 	c := Conf{
-		ImageCategory: img,
-		TotalImage:    tot,
-		Interval:      intv,
-		DefaultPath:   d,
-		Apikey:        k,
+		ImageCategory:          img,
+		TotalImage:             tot,
+		Interval:               intv,
+		DefaultPath:            d,
+		Apikey:                 k,
+		HasAutoDownloadEnabled: autoDownload.(bool),
 	}
 
 	return c
@@ -214,6 +217,7 @@ func (a *App) SetConfig(conf Conf) {
 	appConf.Set("api.download_limit", conf.TotalImage)
 	appConf.Set("image.selected_abs_path", conf.DefaultPath)
 	appConf.Set("image.interval", conf.Interval)
+	appConf.Set("image.auto_download", conf.HasAutoDownloadEnabled)
 }
 
 func (a *App) OpenDirDialogWindow() string {

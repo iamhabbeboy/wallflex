@@ -4,4 +4,5 @@ export interface Configuration {
   Apikey: string;
   TotalImage: number;
   DefaultPath: string;
+  HasAutoDownloadEnabled: boolean;
 }
