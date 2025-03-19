@@ -68,17 +68,17 @@ func (a *App) GetDownloadedImages() ([]string, error) {
 	selectedPath, err := appConf.Get("image.selected_abs_path")
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("path_not_found:Error getting selected path: %v", err)
 	}
 	path := selectedPath.(string)
 	var fp string = path
-	if strings.Contains(path, "picasa") {
-		home, _ := os.UserHomeDir()
-		fp = fmt.Sprintf("%s/%s", home, path)
-	}
+	// if strings.Contains(path, "picasa") {
+	// 	// home, _ := os.UserHomeDir()
+	// 	fp = fmt.Sprintf("%s", path)
+	// }
 	img, err := internal.GetAllFilesInDir(fp)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("images_not_found:Images not found: %v", err)
 	}
 
 	return img, nil
