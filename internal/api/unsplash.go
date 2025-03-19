@@ -35,10 +35,11 @@ type Image struct {
 }
 
 type ImageConfig struct {
-	Category           string
-	TotalDownloadImage int
-	Apikey             string
-	Path               string
+	Category               string
+	TotalDownloadImage     int
+	Apikey                 string
+	Path                   string
+	HasAutoDownloadEnabled bool
 }
 
 type RGBA struct {

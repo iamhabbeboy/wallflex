@@ -82,6 +82,10 @@ func main() {
 }
 
 func scheduleDownloadImages(c api.ImageConfig) error {
+	if !c.HasAutoDownloadEnabled {
+		return nil
+	}
+
 	if err := internal.FetchImages(c); err != nil {
 		return err
 	}
