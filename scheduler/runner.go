@@ -82,11 +82,9 @@ func main() {
 }
 
 func scheduleDownloadImages(c api.ImageConfig) error {
-
-	fmt.Println(c)
-	// internal.FetchImages(c)
-
-	println("Hello, world my people")
+	if err := internal.FetchImages(c); err != nil {
+		return err
+	}
 	return nil
 }
 

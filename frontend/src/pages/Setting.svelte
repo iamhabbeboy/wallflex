@@ -152,8 +152,8 @@
               >,
               <span
                 class="underline"
-                on:click={() => setImageCategory('africa')}
-                on:keydown={() => setImageCategory('africa')}>africa</span
+                on:click={() => setImageCategory('abstract')}
+                on:keydown={() => setImageCategory('abstract')}>abstract</span
               >
             </div>
           </div>
