@@ -92,7 +92,7 @@ func (a *AppConfig) Set(key string, value interface{}) {
 	}
 }
 
-func (a *AppConfig) delete(key string) {
+func (a *AppConfig) Delete(key string) {
 	viper.Set(key, nil)
 	err := viper.WriteConfig()
 	if err != nil {

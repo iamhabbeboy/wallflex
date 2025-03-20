@@ -3,12 +3,9 @@ package main
 import (
 	"desktop/internal"
 	"desktop/internal/api"
-	"fmt"
 	"log"
 	"math/rand"
-	"os"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -65,8 +62,6 @@ func main() {
 		Path:               cimgs,
 	}
 
-	// quit := make(chan struct{})
-
 	for {
 		select {
 		case <-deskw.C:
@@ -76,9 +71,6 @@ func main() {
 		}
 	}
 
-	// time.Sleep(21 * time.Second)
-
-	// Simulate running for some time (e.g., 1 hour)
 }
 
 func scheduleDownloadImages(c api.ImageConfig) error {
@@ -102,6 +94,8 @@ func scheduleSetDesktopWallpaper(cnf string) error {
 
 	random := rand.Intn(len(imgs))
 	f := imgs[random]
+
+	log.Println("Set wallpaper: ", imgs)
 	internal.WallpaperEvent(f)
 
 	return nil
@@ -109,10 +103,10 @@ func scheduleSetDesktopWallpaper(cnf string) error {
 
 func getImages(path string) []string {
 	var fp string = path
-	if strings.Contains(path, "picasa") {
-		home, _ := os.UserHomeDir()
-		fp = fmt.Sprintf("%s/%s", home, path)
-	}
+	// if strings.Contains(path, "picasa") {
+	// 	home, _ := os.UserHomeDir()
+	// 	fp = fmt.Sprintf("%s/%s", home, path)
+	// }
 	img, err := internal.GetAllFilesInDir(fp)
 	if err != nil {
 		println(err.Error())
