@@ -21,12 +21,13 @@ type App struct {
 var appConf = internal.AppConfig{}
 
 type Conf struct {
-	ImageCategory          string
-	TotalImage             int
-	Interval               string
-	DefaultPath            string
-	Apikey                 string
-	HasAutoDownloadEnabled bool
+	ImageCategory            string
+	TotalImage               int
+	Interval                 string
+	DefaultPath              string
+	Apikey                   string
+	ScheduleDownloadInterval string
+	HasAutoDownloadEnabled   bool
 }
 
 const APP_NAME = ".picasa"
@@ -166,8 +167,8 @@ func (a *App) GetConfig() Conf {
 	dp, _ := appConf.Get("image.selected_abs_path")
 	akey, _ := appConf.Get("api.unsplash_apikey")
 	autoDownload, _ := appConf.Get("image.auto_download")
-
-	var img, intv, d string
+	scheduleImageDownload, _ := appConf.Get("api.download_interval")
+	var img, intv, d, scImgDown string
 	var tot int
 	if imgCat == nil {
 		img = ""
@@ -187,6 +188,12 @@ func (a *App) GetConfig() Conf {
 		intv = intvl.(string)
 	}
 
+	if scheduleImageDownload == nil {
+		scImgDown = ""
+	} else {
+		scImgDown = scheduleImageDownload.(string)
+	}
+
 	if dp == nil {
 		d = "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY" //TODO: hardcoding api key is bad, but what can i say... user can be funny, this will help restore the key even when deleted
 	} else {
@@ -201,12 +208,13 @@ func (a *App) GetConfig() Conf {
 	}
 
 	c := Conf{
-		ImageCategory:          img,
-		TotalImage:             tot,
-		Interval:               intv,
-		DefaultPath:            d,
-		Apikey:                 k,
-		HasAutoDownloadEnabled: autoDownload.(bool),
+		ImageCategory:            img,
+		TotalImage:               tot,
+		Interval:                 intv,
+		DefaultPath:              d,
+		Apikey:                   k,
+		ScheduleDownloadInterval: scImgDown,
+		HasAutoDownloadEnabled:   autoDownload.(bool),
 	}
 
 	return c
@@ -218,6 +226,7 @@ func (a *App) SetConfig(conf Conf) {
 	appConf.Set("image.selected_abs_path", conf.DefaultPath)
 	appConf.Set("image.interval", conf.Interval)
 	appConf.Set("image.auto_download", conf.HasAutoDownloadEnabled)
+	appConf.Set("api.download_interval", conf.ScheduleDownloadInterval)
 }
 
 func (a *App) OpenDirDialogWindow() string {

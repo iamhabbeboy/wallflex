@@ -29,9 +29,10 @@ type Image struct {
 }
 
 type Api struct {
-	DownloadLimit int      `mapstructure:"download_limit"`
-	ImageCategory string   `mapstructure:"image_category"`
-	SourceApis    []string `mapstructure:"source_apis"`
+	DownloadLimit            int      `mapstructure:"download_limit"`
+	ImageCategory            string   `mapstructure:"image_category"`
+	SourceApis               []string `mapstructure:"source_apis"`
+	ScheduleDownloadInterval string   `mapstructure:"download_interval"`
 }
 
 func (a *AppConfig) Init(sp string) {

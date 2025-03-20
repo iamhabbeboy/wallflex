@@ -16,6 +16,7 @@
   let message = '';
   let defaultPath = '';
   let apikey = '';
+  let scheduleImageDownloadInterval = '';
   let hasAutoDownloadEnabled = false;
 
   async function handleSaveSetting() {
@@ -29,9 +30,9 @@
       DefaultPath: defaultPath,
       Interval: imageInterval,
       Apikey: apikey,
-      hasAutoDownloadEnabled: hasAutoDownloadEnabled,
+      ScheduleDownloadInterval: scheduleImageDownloadInterval,
+      HasAutoDownloadEnabled: hasAutoDownloadEnabled,
     };
-
     SetConfig(conf);
     try {
       await MessageDialog('Config updated successfully');
@@ -48,6 +49,7 @@
     imageInterval = conf.Interval;
     defaultPath = conf.DefaultPath;
     apikey = conf.Apikey;
+    scheduleImageDownloadInterval = conf.ScheduleDownloadInterval;
     hasAutoDownloadEnabled = conf.HasAutoDownloadEnabled;
   });
 
@@ -67,6 +69,7 @@
       DefaultPath: '.picasa/images',
       Interval: '30s',
       Apikey: '',
+      scheduleImageDownloadInterval: '1w',
       HasAutoDownloadEnabled: false,
     };
     imageCategory = conf.ImageCategory;
@@ -191,9 +194,7 @@
           </div>
           <div>
             <label for="imagepath" class="form-label">
-              Image change interval <span class="text-sm"
-                >(e.g: 5m, 10m, 1h, 5h)
-              </span></label
+              Image change interval </label
             >
             <select
               bind:value={imageInterval}
@@ -212,20 +213,20 @@
           </div>
 
           <div class="my-2">
-            <label for="imagepath" class="form-label"> Schedule Image Download</label>
+            <label for="imagepath" class="form-label"> Schedule Image Download Interval </label>
             <select
-              bind:value={imageInterval}
+              bind:value={scheduleImageDownloadInterval}
               class=" border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
             >
-              <option value="30s" selected={imageInterval === '30s'}>30s</option
+              <option value="30s" selected={scheduleImageDownloadInterval === '30s'}>3s</option
               >
-              <option value="5m" selected={imageInterval === '5m'}>5m</option>
+              <option value="5m" selected={scheduleImageDownloadInterval === '5m'}>5m</option>
 
-              <option value="10m" selected={imageInterval === '10m'}>10m</option
+              <option value="10m" selected={scheduleImageDownloadInterval === '10m'}>10m</option
               >
-              <option value="30m" selected={imageInterval === '30m'}>30m</option
+              <option value="30m" selected={scheduleImageDownloadInterval === '30m'}>30m</option
               >
-              <option value="1h" selected={imageInterval === '1h'}>1h</option>
+              <option value="1w" selected={scheduleImageDownloadInterval === '1w'}>1w</option>
             </select>
           </div>
           <div class="mt-2">

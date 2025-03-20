@@ -4,5 +4,6 @@ export interface Configuration {
   Apikey: string;
   TotalImage: number;
   DefaultPath: string;
+  ScheduleDownloadInterval: string;
   HasAutoDownloadEnabled: boolean;
 }
