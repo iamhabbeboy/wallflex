@@ -6,8 +6,10 @@ import (
 	"desktop/internal/api"
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -37,24 +39,24 @@ func NewApp() *App {
 	return &App{}
 }
 
-func startSchedulerWorker() {
-	fmt.Println("Loading picasa scheduler.....")
-	cmd := exec.Command("/usr/local/bin/picasa_scheduler")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	err := cmd.Start()
-	if err != nil {
-		fmt.Println("Error starting worker:", err)
-		return
-	}
+// func startSchedulerWorker() {
+// 	fmt.Println("Loading picasa scheduler.....")
+// 	cmd := exec.Command("/usr/local/bin/picasa_scheduler")
+// 	cmd.Stdout = os.Stdout
+// 	cmd.Stderr = os.Stderr
+// 	err := cmd.Start()
+// 	if err != nil {
+// 		fmt.Println("Error starting worker:", err)
+// 		return
+// 	}
 
-	err = cmd.Wait()
-	if err != nil {
-		fmt.Println("Worker process finished with error:", err)
-	}
+// 	err = cmd.Wait()
+// 	if err != nil {
+// 		fmt.Println("Worker process finished with error:", err)
+// 	}
 
-	fmt.Printf("[Main App] Scheduler started with PID: %d\n", cmd.Process.Pid)
-}
+// 	fmt.Printf("[Main App] Scheduler started with PID: %d\n", cmd.Process.Pid)
+// }
 
 // startup is called when the app starts. The context is saved
 // so we can call the runtime methods
@@ -63,7 +65,45 @@ func (a *App) startup(ctx context.Context) {
 	menu := SetMenuItem(ctx, a)
 	runtime.MenuSetApplicationMenu(ctx, menu)
 	appConf.Init("$HOME/.picasa")
-	// startSchedulerWorker()
+
+	home, _ := os.UserHomeDir()
+	srcPath := "com.user.wallflex.plist"
+	destDir := filepath.Join(home, "Library/LaunchAgents")
+	destPath := filepath.Join(destDir, filepath.Base(srcPath))
+
+	if !hasLaunchAgent(destPath) {
+		setupLaunchctl(srcPath, destPath)
+	}
+}
+
+func setupLaunchctl(srcPath, destPath string) {
+	cmd := exec.Command("cp", srcPath, destPath)
+	if err := cmd.Run(); err != nil {
+		log.Fatal("Unable to copy the launchctl agent script")
+		return
+	}
+
+	if err := exec.Command("launchctl", "load", destPath).Run(); err != nil {
+		log.Fatal("Unable to load the launchctl agent script")
+		return
+	}
+
+	if err := exec.Command("launchctl", "start", destPath).Run(); err != nil {
+		log.Fatal("Unable to start the launchctl agent script")
+		return
+	}
+	//load the plist file
+	// start the file
+	fmt.Println("Copied the launchagency plist file to the right directory....")
+}
+
+func hasLaunchAgent(dir string) bool {
+	_, err := os.Stat(dir)
+	fmt.Println(os.IsNotExist(err), " =====")
+	if os.IsNotExist(err) {
+		return false
+	}
+	return err == nil
 }
 
 func (a *App) GetDownloadedImages() ([]string, error) {

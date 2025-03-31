@@ -3,26 +3,27 @@
 <plist version="1.0">
   <dict>
     <key>Disabled</key>
-    <false/>
+    <false />
     <key>LimitLoadToSessionType</key>
     <string>Aqua</string>
     <key>Label</key>
-    <string>com.picasa.scheduler.daemon</string>
+    <string>com.user.wallflex</string>
+
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/local/bin/picasa_scheduler</string>
-        <string>--launchd</string>
+      <string>/usr/local/bin/picasa_scheduler</string>
+      <string>--launchd</string>
     </array>
-    <key>RunAtLoad</key>
-    <true/>
-    
-    <key>KeepAlive</key>
-    <true/>
 
+    <key>RunAtLoad</key>
+    <true />
+
+    <key>KeepAlive</key>
+    <true />
     <key>StandardOutPath</key>
-    <string>/tmp/picasa_stdout.log</string>
+    <string>/tmp/wallflex_stdout.log</string>
 
     <key>StandardErrorPath</key>
-    <string>/tmp/picasa_stderr.log</string>
-</dict>
+    <string>/tmp/wallflex_stderr.log</string>
+  </dict>
 </plist>
