@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	APP_NAME    = "picasa"
+	APP_NAME    = "wallflex"
 	CRON_WEEKLY = "0 0 * * 0"
 )
 
@@ -147,7 +147,7 @@ func LoadDefaultConfig(c *api.ConfigService) {
 		AccessKey: "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY",
 		SecretKey: "pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs",
 	}
-	err = c.SetItem("picasa", conf)
+	err = c.SetItem("wallflex", conf)
 	if err != nil {
 		log.Printf("error occured while storing config: %s", err.Error())
 	}

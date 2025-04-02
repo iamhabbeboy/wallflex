@@ -1,7 +1,7 @@
 # Makefile
 SCHEDULER=scheduler/runner.go
-SCHEDULER_BIN=picasa_scheduler
-TMP_PATH=scheduler/picasa_scheduler
+SCHEDULER_BIN=wallflex_scheduler
+TMP_PATH=scheduler/wallflex_scheduler
 TARGET_PATH=/usr/local/bin/$(SCHEDULER_BIN)
 
 build-scheduler:

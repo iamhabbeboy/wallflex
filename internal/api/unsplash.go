@@ -51,6 +51,14 @@ type RGBA struct {
 
 const timeout = 60 * time.Second
 
+var client = &http.Client{ // Optimized HTTP client
+	Timeout: 30 * time.Second,
+	Transport: &http.Transport{
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 10,
+	},
+}
+
 func NewUnsplashService(apikey string, path string) *UnleaseService {
 	return &UnleaseService{
 		apikey: apikey,
@@ -121,8 +129,6 @@ func getImage(ctx context.Context, url string) ([]Image, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	client := http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("[GetImage]: request failed: %w", err)
@@ -146,7 +152,6 @@ func download(ctx context.Context, image string, index int, IMAGE_DIR string, up
 		return err
 	}
 
-	client := http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("[Download]: request failed: %v", err)

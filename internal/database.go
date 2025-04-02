@@ -36,12 +36,12 @@ type Api struct {
 }
 
 func (a *AppConfig) Init(sp string) {
-	viper.SetDefault("app.name", "Picasa Desktop")
+	viper.SetDefault("app.name", "Wallflex")
 	viper.SetDefault("app.version", "0.1.0")
 	// viper.SetDefault("app.default_path", "~/.picasa/")
 
 	home, _ := os.UserHomeDir()
-	fpt := fmt.Sprintf("%s/.picasa/images", home)
+	fpt := fmt.Sprintf("%s/.wallflex/images", home)
 
 	viper.SetDefault("image.selected_abs_path", fpt)
 	viper.SetDefault("image.last_downloads", "")

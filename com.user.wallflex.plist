@@ -11,7 +11,7 @@
 
     <key>ProgramArguments</key>
     <array>
-      <string>/usr/local/bin/picasa_scheduler</string>
+      <string>/usr/local/bin/wallflex_scheduler</string>
       <string>--launchd</string>
     </array>
 

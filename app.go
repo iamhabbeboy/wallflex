@@ -6,7 +6,6 @@ import (
 	"desktop/internal/api"
 	"errors"
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -32,74 +31,61 @@ type Conf struct {
 	HasAutoDownloadEnabled   bool
 }
 
-const APP_NAME = ".picasa"
+const APP_NAME = "wallflex"
 
 // NewApp creates a new App application struct
 func NewApp() *App {
 	return &App{}
 }
 
-// func startSchedulerWorker() {
-// 	fmt.Println("Loading picasa scheduler.....")
-// 	cmd := exec.Command("/usr/local/bin/picasa_scheduler")
-// 	cmd.Stdout = os.Stdout
-// 	cmd.Stderr = os.Stderr
-// 	err := cmd.Start()
-// 	if err != nil {
-// 		fmt.Println("Error starting worker:", err)
-// 		return
-// 	}
-
-// 	err = cmd.Wait()
-// 	if err != nil {
-// 		fmt.Println("Worker process finished with error:", err)
-// 	}
-
-// 	fmt.Printf("[Main App] Scheduler started with PID: %d\n", cmd.Process.Pid)
-// }
-
-// startup is called when the app starts. The context is saved
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 	menu := SetMenuItem(ctx, a)
 	runtime.MenuSetApplicationMenu(ctx, menu)
-	appConf.Init("$HOME/.picasa")
+	appConf.Init(fmt.Sprintf("$HOME/.%s", APP_NAME))
 
 	home, _ := os.UserHomeDir()
 	srcPath := "com.user.wallflex.plist"
+	bin := "/usr/local/bin/wallflex_scheduler"
 	destDir := filepath.Join(home, "Library/LaunchAgents")
 	destPath := filepath.Join(destDir, filepath.Base(srcPath))
 
-	if !hasLaunchAgent(destPath) {
-		setupLaunchctl(srcPath, destPath)
+	if !hasFile("./" + srcPath) {
+		println("Launch script does not exist")
+		return
+	}
+
+	if !hasFile(bin) {
+		println("Wallflex binary does not exist")
+		return
+	}
+
+	if !hasFile(destPath) {
+		if err := setupLaunchctl(srcPath, destPath); err != nil {
+			println(err.Error())
+		}
 	}
 }
 
-func setupLaunchctl(srcPath, destPath string) {
+func setupLaunchctl(srcPath, destPath string) error {
 	cmd := exec.Command("cp", srcPath, destPath)
 	if err := cmd.Run(); err != nil {
-		log.Fatal("Unable to copy the launchctl agent script")
-		return
+		return errors.New("unable to copy the launchctl agent script")
 	}
 
 	if err := exec.Command("launchctl", "load", destPath).Run(); err != nil {
-		log.Fatal("Unable to load the launchctl agent script")
-		return
+		return errors.New("unable to load the launchctl agent script")
 	}
 
 	if err := exec.Command("launchctl", "start", destPath).Run(); err != nil {
-		log.Fatal("Unable to start the launchctl agent script")
-		return
+		return errors.New("unable to start the launchctl agent script")
 	}
-	//load the plist file
-	// start the file
-	fmt.Println("Copied the launchagency plist file to the right directory....")
+	return nil
 }
 
-func hasLaunchAgent(dir string) bool {
+func hasFile(dir string) bool {
 	_, err := os.Stat(dir)
-	fmt.Println(os.IsNotExist(err), " =====")
 	if os.IsNotExist(err) {
 		return false
 	}
@@ -114,10 +100,6 @@ func (a *App) GetDownloadedImages() ([]string, error) {
 	}
 	path := selectedPath.(string)
 	var fp string = path
-	// if strings.Contains(path, "picasa") {
-	// 	// home, _ := os.UserHomeDir()
-	// 	fp = fmt.Sprintf("%s", path)
-	// }
 	img, err := internal.GetAllFilesInDir(fp)
 	if err != nil {
 		return nil, fmt.Errorf("images_not_found:Images not found: %v", err)
@@ -165,15 +147,15 @@ func (a *App) DownloadImages() error {
 
 	var ccat string
 	if cat == nil {
-		ccat = "technology"
+		ccat = "abstract"
 	} else {
 		ccat = cat.(string)
 	}
 
 	var imagePath = dp.(string)
-	if strings.Contains(imagePath, ".picasa") {
+	if strings.Contains(imagePath, "."+APP_NAME) {
 		home, _ := os.UserHomeDir()
-		fp := fmt.Sprintf("%s/.picasa/images", home)
+		fp := fmt.Sprintf("%s/.%s/images", home, APP_NAME)
 		imagePath = fp
 	}
 
@@ -184,7 +166,7 @@ func (a *App) DownloadImages() error {
 		Apikey:             apikey.(string),
 	}
 
-	err := deleteFilesWithPrefix(imagePath, "picasa_")
+	err := deleteFilesWithPrefix(imagePath, APP_NAME+"_")
 
 	if err != nil {
 		return fmt.Errorf("error deleting images: %v ", err.Error())

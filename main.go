@@ -32,15 +32,16 @@ func (h *FileLoader) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	fileData, err := os.ReadFile(requestPath)
 	if err != nil {
 		res.WriteHeader(http.StatusBadRequest)
-		res.Write([]byte(fmt.Sprintf("Could not load file %s", requestPath)))
+		res.Write(fmt.Appendf(nil, "Could not load file %s", requestPath))
+		// res.Write([]byte(fmt.Sprintf("Could not load file %s", requestPath)))
 	}
 
 	res.Write(fileData)
 }
 
-func createPicasaBaseDir() {
+func createDefaultDir() {
 	baseDir, _ := os.UserHomeDir()
-	parentDir := fmt.Sprintf("%s/.picasa", baseDir)
+	parentDir := fmt.Sprintf("%s/.%s", baseDir, APP_NAME)
 	childDir := filepath.Join(parentDir, "images")
 
 	// Create the parent directory
@@ -59,12 +60,12 @@ func createPicasaBaseDir() {
 
 func main() {
 
-	createPicasaBaseDir()
+	createDefaultDir()
 
 	app := NewApp()
 
 	err := wails.Run(&options.App{
-		Title:         "Picasa Desktop",
+		Title:         APP_NAME,
 		Width:         990,
 		Height:        768,
 		DisableResize: true,
@@ -98,7 +99,7 @@ func main() {
 			WebviewIsTransparent: false,
 			WindowIsTranslucent:  false,
 			About: &mac.AboutInfo{
-				Title:   "Picasa Desktop",
+				Title:   APP_NAME,
 				Message: "©2024 Abiodun Azeez",
 				// Icon: []byte,
 			},

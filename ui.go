@@ -16,7 +16,7 @@ func SetMenuItem(ctx context.Context, app *App) *menu.Menu {
 	FileMenu.AddText("About", keys.CmdOrCtrl("a"), func(cd *menu.CallbackData) {
 		_, err := run.MessageDialog(ctx, run.MessageDialogOptions{
 			Type:          run.InfoDialog,
-			Title:         "Picasa Desktop",
+			Title:         "Wallflex",
 			Message:       "Get random wallpaper for your desktop. \n \n © 2024. Abiodun Azeez. \n All Right Reserved.",
 			DefaultButton: "No",
 		})

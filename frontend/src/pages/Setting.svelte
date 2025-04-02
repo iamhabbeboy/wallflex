@@ -18,7 +18,10 @@
   let apikey = '';
   let scheduleImageDownloadInterval = '';
   let hasAutoDownloadEnabled = false;
-  let isAutoWallpaperEnabled = false;
+  //@TODO
+  // The goal of this is to disable/enable for auto wallpaper. When enable, it should add a binary file to the /usr/local/bin directory. 
+  // When disabled, it should unload the file
+  let isAutoWallpaperEnabled = false; 
 
   async function handleSaveSetting() {
     if (imageCategory === '' || totalImageCount === 0 || imageInterval === '') {
@@ -67,7 +70,7 @@
     const conf = {
       ImageCategory: 'nature',
       TotalImage: 10,
-      DefaultPath: '.picasa/images',
+      DefaultPath: '.wallflex/images',
       Interval: '30s',
       Apikey: '',
       scheduleImageDownloadInterval: '1w',

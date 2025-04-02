@@ -3,7 +3,6 @@ package internal
 import (
 	"desktop/internal/api"
 	"fmt"
-	"github.com/fogleman/gg"
 	"image/color"
 	"image/png"
 	"os"
@@ -12,6 +11,8 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/fogleman/gg"
 )
 
 func GetImagesFromDir() []string {
@@ -19,7 +20,7 @@ func GetImagesFromDir() []string {
 	if err != nil {
 		return []string{err.Error()}
 	}
-	const APP_NAME = ".picasa"
+	// const APP_NAME = ".wallflex"
 	base := fmt.Sprintf("%s/%s", homedir, APP_NAME)
 	dir := path.Join(base, "/", "images")
 	ent, err := os.ReadDir(dir)
