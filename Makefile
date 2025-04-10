@@ -7,8 +7,8 @@ TARGET_PATH=/usr/local/bin/$(SCHEDULER_BIN)
 build-scheduler:
 	@echo "Building worker..."
 	go build -o $(TMP_PATH) $(SCHEDULER)
-	sudo cp $(TMP_PATH) $(TARGET_PATH)
-	sudo chmod +x $(TARGET_PATH)
+	# sudo cp $(TMP_PATH) $(TARGET_PATH)
+	#sudo chmod +x $(TARGET_PATH)
 
 build-wails:
 	build-scheduler

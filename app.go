@@ -21,6 +21,8 @@ type App struct {
 
 var appConf = internal.AppConfig{}
 
+var bin string = "/usr/local/bin/wallflex_scheduler"
+
 type Conf struct {
 	ImageCategory            string
 	TotalImage               int
@@ -44,12 +46,7 @@ func (a *App) startup(ctx context.Context) {
 	menu := SetMenuItem(ctx, a)
 	runtime.MenuSetApplicationMenu(ctx, menu)
 	appConf.Init(fmt.Sprintf("$HOME/.%s", APP_NAME))
-
-	home, _ := os.UserHomeDir()
-	srcPath := "com.user.wallflex.plist"
-	bin := "/usr/local/bin/wallflex_scheduler"
-	destDir := filepath.Join(home, "Library/LaunchAgents")
-	destPath := filepath.Join(destDir, filepath.Base(srcPath))
+	srcPath, destPath := getLaunchAgent()
 
 	if !hasFile("./" + srcPath) {
 		println("Launch script does not exist")
@@ -58,7 +55,8 @@ func (a *App) startup(ctx context.Context) {
 
 	if !hasFile(bin) {
 		println("Wallflex binary does not exist")
-		return
+		cmd := exec.Command("cp", "./scheduler/wallflex_scheduler", bin)
+		_ = cmd.Run()
 	}
 
 	if !hasFile(destPath) {
@@ -173,6 +171,13 @@ func (a *App) DownloadImages() error {
 	}
 	if err := internal.FetchImages(c); err != nil {
 		return err
+	}
+	_, lagentPath := getLaunchAgent()
+	if err := exec.Command("launchctl", "unload", lagentPath).Run(); err != nil {
+		return errors.New("unable to load the launchctl agent script")
+	}
+	if err := exec.Command("launchctl", "load", lagentPath).Run(); err != nil {
+		return errors.New("unable to load the launchctl agent script")
 	}
 
 	return nil
@@ -328,3 +333,10 @@ func (a *App) Testament() error {
 
 // https://gist.github.com/stupidbodo/0db61fa874213a31dc57 - replacement for cronjob
 // https://gist.github.com/harubaru/f727cedacae336d1f7877c4bbe2196e1#model-overview
+func getLaunchAgent() (string, string) {
+	home, _ := os.UserHomeDir()
+	srcPath := "com.user.wallflex.plist"
+	destDir := filepath.Join(home, "Library/LaunchAgents")
+	destPath := filepath.Join(destDir, filepath.Base(srcPath))
+	return srcPath, destPath
+}

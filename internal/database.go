@@ -48,7 +48,7 @@ func (a *AppConfig) Init(sp string) {
 	viper.SetDefault("image.interval", "10m")
 	viper.SetDefault("image.auto_download", false)
 
-	viper.SetDefault("api.download_limit", 2)
+	viper.SetDefault("api.download_limit", 3)
 	viper.SetDefault("api.download_interval", "1w")
 	viper.SetDefault("api.unsplash_apikey", "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY")
 	viper.SetDefault("api.image_category", "abstract")
@@ -59,7 +59,7 @@ func (a *AppConfig) Init(sp string) {
 		fp = sp
 	}
 
-	viper.SetConfigName("picasa")
+	viper.SetConfigName("wallflex")
 	viper.AddConfigPath(fp)
 	viper.SetConfigType("yaml")
 

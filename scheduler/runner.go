@@ -11,7 +11,7 @@ import (
 
 func main() {
 	conf := &internal.AppConfig{}
-	conf.Init("$HOME/.picasa")
+	conf.Init("$HOME/.wallflex")
 
 	cint, _ := conf.Get("image.interval")
 	imgs, _ := conf.Get("image.selected_abs_path")

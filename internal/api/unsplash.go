@@ -49,15 +49,15 @@ type RGBA struct {
 	A int
 }
 
-const timeout = 60 * time.Second
+const timeout = 5 * time.Minute
 
-var client = &http.Client{ // Optimized HTTP client
-	Timeout: 30 * time.Second,
+/*var client = &http.Client{ // Optimized HTTP client
+	Timeout: 5 * time.Minute,
 	Transport: &http.Transport{
 		MaxIdleConns:        100,
 		MaxIdleConnsPerHost: 10,
 	},
-}
+}*/
 
 func NewUnsplashService(apikey string, path string) *UnleaseService {
 	return &UnleaseService{
@@ -125,44 +125,46 @@ func (u *UnleaseService) GetImages(imgConf ImageConfig) error {
 }
 
 func getImage(ctx context.Context, url string) ([]Image, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	req, err := http.Get(url)
+	// req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("[GetImage]: request failed: %w", err)
-	}
-	defer resp.Body.Close()
+	// resp, err := client.Do(req)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("[GetImage]: request failed: %w", err)
+	// }
+	defer req.Body.Close()
 	// Check if the response status is OK
-	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	if req.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("unexpected status code: %d", req.StatusCode)
 	}
 
 	var p []Image
-	if err := json.NewDecoder(resp.Body).Decode(&p); err != nil {
+	if err := json.NewDecoder(req.Body).Decode(&p); err != nil {
 		return nil, err
 	}
 	return p, nil
 }
 
 func download(ctx context.Context, image string, index int, IMAGE_DIR string, upr string) error {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, image, nil)
+	req, err := http.Get(image)
+	// req, err := http.NewRequestWithContext(ctx, http.MethodGet, image, nil)
 	if err != nil {
 		return err
 	}
 
-	resp, err := client.Do(req)
-	if err != nil {
-		return fmt.Errorf("[Download]: request failed: %v", err)
-	}
-	defer resp.Body.Close()
+	// resp, err := client.Do(req)
+	// if err != nil {
+	// 	return fmt.Errorf("[Download]: request failed: %v", err)
+	// }
+	defer req.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+	if req.StatusCode != http.StatusOK {
+		return fmt.Errorf("unexpected status code: %d", req.StatusCode)
 	}
 
-	fn := fmt.Sprintf("%s/picasa_%v_%s.jpg", IMAGE_DIR, index, upr)
+	fn := fmt.Sprintf("%s/wallflex_%v_%s.jpg", IMAGE_DIR, index, upr)
 
 	info := fmt.Sprintf("Downloading: %s", fn)
 	fmt.Println(info)
@@ -173,7 +175,7 @@ func download(ctx context.Context, image string, index int, IMAGE_DIR string, up
 	}
 
 	defer f.Close()
-	_, err = io.Copy(f, resp.Body)
+	_, err = io.Copy(f, req.Body)
 
 	if err != nil {
 		return err
