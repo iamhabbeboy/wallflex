@@ -31,6 +31,7 @@ type Conf struct {
 	Apikey                   string
 	ScheduleDownloadInterval string
 	HasAutoDownloadEnabled   bool
+	HasAutoWallpaperEnabled  bool
 }
 
 const APP_NAME = "wallflex"
@@ -172,13 +173,6 @@ func (a *App) DownloadImages() error {
 	if err := internal.FetchImages(c); err != nil {
 		return err
 	}
-	_, lagentPath := getLaunchAgent()
-	if err := exec.Command("launchctl", "unload", lagentPath).Run(); err != nil {
-		return errors.New("unable to load the launchctl agent script")
-	}
-	if err := exec.Command("launchctl", "load", lagentPath).Run(); err != nil {
-		return errors.New("unable to load the launchctl agent script")
-	}
 
 	return nil
 }
@@ -195,6 +189,8 @@ func (a *App) GetConfig() Conf {
 	akey, _ := appConf.Get("api.unsplash_apikey")
 	autoDownload, _ := appConf.Get("image.auto_download")
 	scheduleImageDownload, _ := appConf.Get("api.download_interval")
+	autoChangeWallpaper, _ := appConf.Get("image.auto_change_wallpaper")
+
 	var img, intv, d, scImgDown string
 	var tot int
 	if imgCat == nil {
@@ -242,18 +238,32 @@ func (a *App) GetConfig() Conf {
 		Apikey:                   k,
 		ScheduleDownloadInterval: scImgDown,
 		HasAutoDownloadEnabled:   autoDownload.(bool),
+		HasAutoWallpaperEnabled:  autoChangeWallpaper.(bool),
 	}
 
 	return c
 }
 
-func (a *App) SetConfig(conf Conf) {
+func (a *App) SetConfig(conf Conf) error {
 	appConf.Set("api.image_category", conf.ImageCategory)
 	appConf.Set("api.download_limit", conf.TotalImage)
 	appConf.Set("image.selected_abs_path", conf.DefaultPath)
 	appConf.Set("image.interval", conf.Interval)
 	appConf.Set("image.auto_download", conf.HasAutoDownloadEnabled)
+	appConf.Set("image.auto_change_wallpaper", conf.HasAutoWallpaperEnabled)
 	appConf.Set("api.download_interval", conf.ScheduleDownloadInterval)
+
+	_, lagentPath := getLaunchAgent()
+	if err := exec.Command("launchctl", "unload", lagentPath).Run(); err != nil {
+		return errors.New("unable to load the launchctl agent script: " + err.Error())
+	}
+	if err := exec.Command("launchctl", "load", lagentPath).Run(); err != nil {
+		return errors.New("unable to load the launchctl agent script: " + err.Error())
+	}
+	if err := exec.Command("launchctl", "start", lagentPath).Run(); err != nil {
+		return errors.New("unable to start the launchctl agent script : " + err.Error())
+	}
+	return nil
 }
 
 func (a *App) OpenDirDialogWindow() string {

@@ -6,4 +6,5 @@ export interface Configuration {
   DefaultPath: string;
   ScheduleDownloadInterval: string;
   HasAutoDownloadEnabled: boolean;
+  HasAutoWallpaperEnabled: boolean;
 }

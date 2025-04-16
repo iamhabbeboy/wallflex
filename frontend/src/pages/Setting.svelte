@@ -36,9 +36,11 @@
       Apikey: apikey,
       ScheduleDownloadInterval: scheduleImageDownloadInterval,
       HasAutoDownloadEnabled: hasAutoDownloadEnabled,
+      HasAutoWallpaperEnabled: isAutoWallpaperEnabled,
     };
-    SetConfig(conf);
+
     try {
+     SetConfig(conf);
       await MessageDialog('Config updated successfully');
     } catch (e) {
       const error = e instanceof Error ? e.message : 'Unknown error';
@@ -55,6 +57,7 @@
     apikey = conf.Apikey;
     scheduleImageDownloadInterval = conf.ScheduleDownloadInterval;
     hasAutoDownloadEnabled = conf.HasAutoDownloadEnabled;
+    isAutoWallpaperEnabled = conf.HasAutoWallpaperEnabled;
   });
 
   const handleSelectFolder = async () => {
@@ -197,8 +200,25 @@
               <div
                 class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600"
               ></div>
-              <span class="ms-3 text-sm font-medium">Auto download images</span>
+              <span class="ms-3 text-sm font-medium">Schedule image download </span>
             </label>
+          </div>
+          <div class="my-2">
+            <label for="imagepath" class="form-label"> Schedule image download Interval </label>
+            <select
+              bind:value={scheduleImageDownloadInterval}
+              class=" border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
+            >
+              <option value="30s" selected={scheduleImageDownloadInterval === '30s'}>3s</option
+              >
+              <option value="5m" selected={scheduleImageDownloadInterval === '5m'}>5m</option>
+
+              <option value="10m" selected={scheduleImageDownloadInterval === '10m'}>10m</option
+              >
+              <option value="30m" selected={scheduleImageDownloadInterval === '30m'}>30m</option
+              >
+              <option value="1w" selected={scheduleImageDownloadInterval === '1w'}>1w</option>
+            </select>
           </div>
           <div>
             <label for="imagepath" class="form-label">
@@ -220,23 +240,6 @@
             </select>
           </div>
 
-          <div class="my-2">
-            <label for="imagepath" class="form-label"> Schedule Image Download Interval </label>
-            <select
-              bind:value={scheduleImageDownloadInterval}
-              class=" border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
-            >
-              <option value="30s" selected={scheduleImageDownloadInterval === '30s'}>3s</option
-              >
-              <option value="5m" selected={scheduleImageDownloadInterval === '5m'}>5m</option>
-
-              <option value="10m" selected={scheduleImageDownloadInterval === '10m'}>10m</option
-              >
-              <option value="30m" selected={scheduleImageDownloadInterval === '30m'}>30m</option
-              >
-              <option value="1w" selected={scheduleImageDownloadInterval === '1w'}>1w</option>
-            </select>
-          </div>
           <div class="mt-2">
             <label for="imagepath" class="form-label"> Unsplash API key</label>
             <input

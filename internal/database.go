@@ -23,9 +23,10 @@ type AppConf struct {
 }
 
 type Image struct {
-	SelectedAbsPath        string    `mapstructure:"selected_abs_path"`
-	LastDownloads          time.Time `mapstructure:"last_downloads"`
-	HasAutoDownloadEnabled bool      `mapstructure:"auto_download"`
+	SelectedAbsPath         string    `mapstructure:"selected_abs_path"`
+	LastDownloads           time.Time `mapstructure:"last_downloads"`
+	HasAutoDownloadEnabled  bool      `mapstructure:"auto_download"`
+	HasAutoWallpaperEnabled bool      `mapstructure:"auto_change_wallpaper"`
 }
 
 type Api struct {
@@ -47,6 +48,7 @@ func (a *AppConfig) Init(sp string) {
 	viper.SetDefault("image.last_downloads", "")
 	viper.SetDefault("image.interval", "10m")
 	viper.SetDefault("image.auto_download", false)
+	viper.SetDefault("image.auto_change_wallpaper", true)
 
 	viper.SetDefault("api.download_limit", 3)
 	viper.SetDefault("api.download_interval", "1w")

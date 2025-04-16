@@ -1,10 +1,4 @@
 <script lang="ts">
-  import {
-    GetDownloadedImages,
-    SelectImageDir,
-    DownloadImages,
-  } from '../../wailsjs/go/main/App.js';
-
   import { link } from 'svelte-routing';
 
   import DownloadImage from '../../src/assets/images/download.svg';
@@ -91,7 +85,7 @@
     <div class="flex">
       <a
         href="#"
-        on:click|preventDefault={downloadImages}
+        on:click|once={downloadImages}
         class="dark:text-gray-50 text-gray-500 text-xs flex mr-5 hover:cursor-default"
       >
         <img
