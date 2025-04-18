@@ -21,7 +21,7 @@ type App struct {
 
 var appConf = internal.AppConfig{}
 
-var bin string = "/usr/local/bin/wallflex_scheduler"
+var bin string = "/usr/local/bin/wallflex"
 
 type Conf struct {
 	ImageCategory            string
@@ -56,10 +56,9 @@ func (a *App) startup(ctx context.Context) {
 
 	if !hasFile(bin) {
 		println("Wallflex binary does not exist")
-		cmd := exec.Command("cp", "./scheduler/wallflex_scheduler", bin)
+		cmd := exec.Command("cp", "./scheduler/wallflex", bin)
 		_ = cmd.Run()
 	}
-
 	if !hasFile(destPath) {
 		if err := setupLaunchctl(srcPath, destPath); err != nil {
 			println(err.Error())
@@ -68,17 +67,23 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func setupLaunchctl(srcPath, destPath string) error {
+	if err := exec.Command("launchctl", "unload", destPath).Run(); err != nil {
+		return errors.New("unable to unload the launchctl agent script: " + err.Error())
+	}
+	if err := exec.Command("launchctl", "remove", destPath).Run(); err != nil {
+		println("unable to remove the launchctl agent script: " + err.Error())
+	}
+
 	cmd := exec.Command("cp", srcPath, destPath)
 	if err := cmd.Run(); err != nil {
 		return errors.New("unable to copy the launchctl agent script")
 	}
-
 	if err := exec.Command("launchctl", "load", destPath).Run(); err != nil {
 		return errors.New("unable to load the launchctl agent script")
 	}
-
-	if err := exec.Command("launchctl", "start", destPath).Run(); err != nil {
-		return errors.New("unable to start the launchctl agent script")
+	println(destPath)
+	if err := exec.Command("launchctl", "start", srcPath).Run(); err != nil {
+		return errors.New("unable to start the launchctl agent script: " + err.Error())
 	}
 	return nil
 }
@@ -218,7 +223,7 @@ func (a *App) GetConfig() Conf {
 	}
 
 	if dp == nil {
-		d = "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY" //TODO: hardcoding api key is bad, but what can i say... user can be funny, this will help restore the key even when deleted
+		d = ""
 	} else {
 		d = dp.(string)
 	}
@@ -252,16 +257,9 @@ func (a *App) SetConfig(conf Conf) error {
 	appConf.Set("image.auto_download", conf.HasAutoDownloadEnabled)
 	appConf.Set("image.auto_change_wallpaper", conf.HasAutoWallpaperEnabled)
 	appConf.Set("api.download_interval", conf.ScheduleDownloadInterval)
-
 	_, lagentPath := getLaunchAgent()
-	if err := exec.Command("launchctl", "unload", lagentPath).Run(); err != nil {
-		return errors.New("unable to load the launchctl agent script: " + err.Error())
-	}
-	if err := exec.Command("launchctl", "load", lagentPath).Run(); err != nil {
-		return errors.New("unable to load the launchctl agent script: " + err.Error())
-	}
-	if err := exec.Command("launchctl", "start", lagentPath).Run(); err != nil {
-		return errors.New("unable to start the launchctl agent script : " + err.Error())
+	if err := exec.Command("launchctl", "kickstart", "-k", lagentPath).Run(); err != nil {
+		return errors.New("unable to kickstart the launchctl agent script: " + err.Error())
 	}
 	return nil
 }
@@ -315,10 +313,6 @@ func (a *App) GetHexToRGBA(color string) (api.RGBA, error) {
 	r, _ := internal.HexToRGBA(color)
 	fmt.Println(r)
 	return api.RGBA{}, nil
-}
-
-func (a *App) Testament() error {
-	return fmt.Errorf("Testament...")
 }
 
 // func (ax *App) GGradient(color string) interface{} {

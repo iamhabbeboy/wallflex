@@ -1,13 +1,13 @@
 # Makefile
 SCHEDULER=scheduler/runner.go
-SCHEDULER_BIN=wallflex_scheduler
-TMP_PATH=scheduler/wallflex_scheduler
+SCHEDULER_BIN=wallflex
+TMP_PATH=scheduler/wallflex
 TARGET_PATH=/usr/local/bin/$(SCHEDULER_BIN)
 
 build-scheduler:
 	@echo "Building worker..."
 	go build -o $(TMP_PATH) $(SCHEDULER)
-	# sudo cp $(TMP_PATH) $(TARGET_PATH)
+	cp $(TMP_PATH) $(TARGET_PATH)
 	#sudo chmod +x $(TARGET_PATH)
 
 build-wails:

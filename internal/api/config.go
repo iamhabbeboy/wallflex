@@ -21,7 +21,7 @@ type ConfigStorer struct {
 	SecretKey string
 }
 
-var LOCAL_DB_KEY = "picasa"
+var LOCAL_DB_KEY = "wallflex"
 
 // func LoadConfig() *viper.Viper {
 // v := viper.New()
@@ -41,8 +41,8 @@ var LOCAL_DB_KEY = "picasa"
 // v.SetDefault("api.query", "nature")
 // v.SetDefault("api.url", "https://api.unsplash.com/")
 // v.SetDefault("config.image_path", fmt.Sprintf("%s/images", configPath))
-// v.SetDefault("api.access_key", "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY")
-// v.SetDefault("api.secret_key", "pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs")
+// v.SetDefault("api.access_key", "")
+// v.SetDefault("api.secret_key", "")
 
 // // Write the configuration options to a YAML file
 // if err := v.WriteConfigAs(fmt.Sprintf("%s/config.yaml", configPath)); err != nil {

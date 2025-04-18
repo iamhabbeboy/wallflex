@@ -3,6 +3,7 @@ package main
 import (
 	"desktop/internal"
 	"desktop/internal/api"
+	"encoding/json"
 	"log"
 	"math/rand"
 	"strconv"
@@ -64,27 +65,31 @@ func main() {
 
 	for {
 		select {
-		case <-deskw.C:
-			scheduleSetDesktopWallpaper(cimgs)
-		case <-down.C:
-			scheduleDownloadImages(c)
+		case t := <-deskw.C:
+			scheduleSetDesktopWallpaper(t, cimgs)
+		case s := <-down.C:
+			scheduleDownloadImages(s, c)
 		}
 	}
-
 }
 
-func scheduleDownloadImages(c api.ImageConfig) error {
+func scheduleDownloadImages(t time.Time, c api.ImageConfig) error {
+	print("------")
+	println(t.String())
 	if !c.HasAutoDownloadEnabled {
 		return nil
 	}
-
+	println("Downloading images...")
+	j, _ := json.Marshal(c)
+	println(string(j))
 	if err := internal.FetchImages(c); err != nil {
 		return err
 	}
 	return nil
 }
 
-func scheduleSetDesktopWallpaper(cnf string) error {
+func scheduleSetDesktopWallpaper(t time.Time, cnf string) error {
+	println(t.String())
 	if cnf == "" {
 		log.Fatal("Image directory not set")
 	}
@@ -95,7 +100,7 @@ func scheduleSetDesktopWallpaper(cnf string) error {
 	random := rand.Intn(len(imgs))
 	f := imgs[random]
 
-	log.Println("Set wallpaper: ", imgs)
+	log.Println("Current Wallpaper Path: ", f)
 	internal.WallpaperEvent(f)
 
 	return nil
@@ -103,10 +108,6 @@ func scheduleSetDesktopWallpaper(cnf string) error {
 
 func getImages(path string) []string {
 	var fp string = path
-	// if strings.Contains(path, "picasa") {
-	// 	home, _ := os.UserHomeDir()
-	// 	fp = fmt.Sprintf("%s/%s", home, path)
-	// }
 	img, err := internal.GetAllFilesInDir(fp)
 	if err != nil {
 		println(err.Error())

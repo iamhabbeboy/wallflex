@@ -187,7 +187,7 @@
               class="border border-gray-400 p-2 h-11 w-6/12 rounded-md outline-none"
             >
               <option value={3} selected={totalImageCount === 3}>3</option>
-              <option value={5} selected={totalImageCount === 5}>5</option>
+              <option value={6} selected={totalImageCount === 6}>6</option>
               <option value={10} selected={totalImageCount === 10}>10</option>
               <option value={15} selected={totalImageCount === 15}>15</option>
 

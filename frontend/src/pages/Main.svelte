@@ -29,15 +29,24 @@
   };
 
   async function downloadImages() {
+    isLoading = true
     try {
       await DownloadImages();
     } catch (e) {
-      MessageDialog(e);
+      const errorMessage = e.message || e.toString();
+      if (errorMessage.includes('error deleting images')) {
+        return;
+      }
+      MessageDialog(errorMessage);
     } finally {
       const result = await GetDownloadedImages();
       images = result ?? [];
       isLoading = false;
     }
+  }
+
+  async function testingFunction() {
+    console.log('Testing function');
   }
 
   onMount(async (): Promise<any> => {
@@ -54,13 +63,6 @@
     rpc.on('shortcut.page.setting', () => {
       navigate('/setting', { replace: true });
     });
-
-    imagePathStore.subscribe(async (value) => {
-      if (value === 'downloading') {
-        isLoading = true;
-        await downloadImages();
-      }
-    });
     isLoading = false;
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -76,7 +78,7 @@
 </script>
 
 <div class="text-gray-400">
-  <Navigation />
+  <Navigation setDownloadEvent={downloadImages} />
   {#if !isLoading && images.length === 0}
     <div class="mt-32 w-4/12 mx-auto text-center flex flex-col">
       <img src={NoImagesPlaceHolder} alt="" width="300" />

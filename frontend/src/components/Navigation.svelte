@@ -1,18 +1,9 @@
 <script lang="ts">
   import { link } from 'svelte-routing';
-
   import DownloadImage from '../../src/assets/images/download.svg';
   import ConfigImage from '../../src/assets/images/config.svg';
 
-  import { dispatcher } from '../../src/utilities/util';
-
-  let isLoading = true;
-
-  let images: string[] = [];
-
-  async function downloadImages() {
-    dispatcher('downloading');
-  }
+  export let setDownloadEvent: () => Promise<void>;
 </script>
 
 <template>
@@ -20,6 +11,7 @@
     class=" dark:bg-gray-700 dark:text-gray-50 bg-gray-50 p-3 border-b dark:border-gray-600 flex justify-between fixed w-[100%] top-0 left-0"
   >
     <div class="flex">
+       <!--
       <a
         href="/"
         use:link
@@ -32,7 +24,6 @@
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         /> Images</a
       >
-      <!--
       <a
         href="/plain-art"
         use:link
@@ -45,7 +36,6 @@
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         /> Plain Art</a
       >
-
       <a
         href="/abstract-art"
         class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
@@ -57,7 +47,6 @@
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         /> Abstract Art</a
       >
-
        <a
         href="/ai"
         class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
@@ -69,7 +58,6 @@
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         /> AI
       </a>
-
        <a
         href="#"
         class="dark:text-gray-50 text-gray-500 text-xs flex ml-10 hover:cursor-default"
@@ -80,12 +68,12 @@
           alt=""
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         /> Upload folder</a
-      >-->
+      > -->
     </div>
     <div class="flex">
-      <a
-        href="#"
-        on:click|once={downloadImages}
+      <span
+        on:click|once={setDownloadEvent}
+        on:keydown|once={setDownloadEvent}
         class="dark:text-gray-50 text-gray-500 text-xs flex mr-5 hover:cursor-default"
       >
         <img
@@ -94,7 +82,7 @@
           alt=""
           class="mr-1 dark:brightness-0 dark:invert-[1]"
         />Download
-      </a>
+    </span>
 
       <a
         href="/setting"

@@ -144,8 +144,8 @@ func LoadDefaultConfig(c *api.ConfigService) {
 		Query:     "cars",
 		APIUrl:    "https://api.unsplash.com/",
 		ImagePath: fmt.Sprintf("%s/images", configPath),
-		AccessKey: "Nw5jS2P4zr_oO_qbFt_39zyj7QTIMI49vYx5lCzxujY",
-		SecretKey: "pseMeAYqR4G1I8cx8vbwkm4HTs1o56NzW6ZiKGHCMNs",
+		AccessKey: "",
+		SecretKey: "",
 	}
 	err = c.SetItem("wallflex", conf)
 	if err != nil {
