@@ -4,6 +4,7 @@ import (
 	"desktop/internal"
 	"desktop/internal/api"
 	"encoding/json"
+	"fmt"
 	"log"
 	"math/rand"
 	"strconv"
@@ -74,8 +75,10 @@ func main() {
 }
 
 func scheduleDownloadImages(t time.Time, c api.ImageConfig) error {
-	print("------")
+	println("------Downloading....")
 	println(t.String())
+	println("------Downloading....")
+	fmt.Println(c)
 	if !c.HasAutoDownloadEnabled {
 		return nil
 	}

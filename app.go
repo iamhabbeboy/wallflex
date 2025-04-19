@@ -258,9 +258,24 @@ func (a *App) SetConfig(conf Conf) error {
 	appConf.Set("image.auto_change_wallpaper", conf.HasAutoWallpaperEnabled)
 	appConf.Set("api.download_interval", conf.ScheduleDownloadInterval)
 	_, lagentPath := getLaunchAgent()
-	if err := exec.Command("launchctl", "kickstart", "-k", lagentPath).Run(); err != nil {
-		return errors.New("unable to kickstart the launchctl agent script: " + err.Error())
+
+	if !conf.HasAutoWallpaperEnabled {
+		if err := exec.Command("launchctl", "unload", lagentPath).Run(); err != nil {
+			return errors.New("unable to unregister the launchctl agent script: " + err.Error())
+		}
+		return nil
 	}
+
+	if conf.HasAutoWallpaperEnabled {
+		if err := exec.Command("launchctl", "load", lagentPath).Run(); err != nil {
+			return errors.New("unable to unregister the launchctl agent script: " + err.Error())
+		}
+		if err := exec.Command("launchctl", "kickstart", "-k", lagentPath).Run(); err != nil {
+			return errors.New("unable to restart the launchctl agent script: " + err.Error())
+		}
+		return nil
+	}
+
 	return nil
 }
 
