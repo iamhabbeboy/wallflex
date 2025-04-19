@@ -252,6 +252,7 @@ func (a *App) GetConfig() Conf {
 func (a *App) SetConfig(conf Conf) error {
 	appConf.Set("api.image_category", conf.ImageCategory)
 	appConf.Set("api.download_limit", conf.TotalImage)
+	appConf.Set("api.unsplash_apikey", conf.Apikey)
 	appConf.Set("image.selected_abs_path", conf.DefaultPath)
 	appConf.Set("image.interval", conf.Interval)
 	appConf.Set("image.auto_download", conf.HasAutoDownloadEnabled)

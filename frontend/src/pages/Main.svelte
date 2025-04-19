@@ -37,6 +37,11 @@
       if (errorMessage.includes('error deleting images')) {
         return;
       }
+      if(errorMessage.includes('unexpected')) {
+        const errorMessage = 'Unsplash API key is missing or invalid.Please update it in the configuration settings';
+        MessageDialog(errorMessage);
+        return;
+      }
       MessageDialog(errorMessage);
     } finally {
       const result = await GetDownloadedImages();
